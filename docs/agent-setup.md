@@ -10,7 +10,7 @@ For Claude Code, Codex, or another coding agent running on the user's Mac. This 
 
 ## 2. Obtain the app
 
-**Default: prebuilt ZIP.** Use the Releases link in the README. Preview releases may not appear at GitHub's `/releases/latest` endpoint. Choose a published release, never a draft, and download its `Kestrel-<version>-macos-arm64.zip` and matching `.zip.sha256`. Do not use GitHub's source-code ZIP as the app download. Keep the two files together and verify the archive with:
+**Default: prebuilt ZIP.** Use the direct app ZIP and checksum links in the README, or its Release notes link to inspect the published release. Preview releases may not appear at GitHub's `/releases/latest` endpoint. Choose a published release, never a draft, and download its `Kestrel-<version>-macos-arm64.zip` and matching `.zip.sha256`. Do not use GitHub's source-code ZIP as the app download. Keep the two files together and verify the archive with:
 
 ```sh
 shasum -a 256 -c Kestrel-<version>-macos-arm64.zip.sha256
