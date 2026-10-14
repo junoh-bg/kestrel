@@ -1,0 +1,1 @@
+Kestrel native metadata search verification fixture. No user content.

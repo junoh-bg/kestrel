@@ -1,0 +1,19 @@
+.build/
+.swiftpm/
+dist/
+.DS_Store
+Tests/Fixtures/runtime-search-*/
+__pycache__/
+*.pyc
+
+# Local configuration, signing material, and application data
+.env
+.env.*
+*.p12
+*.pfx
+*.pem
+*.key
+*.mobileprovision
+*.dSYM/
+state.json
+search-folders.json

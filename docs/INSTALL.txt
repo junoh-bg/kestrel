@@ -1,0 +1,26 @@
+KESTREL — EVERYDAY MAC TOOLS, ONE SHORTCUT AWAY
+
+Requires macOS 14 or later and an Apple silicon (M-series) Mac.
+
+1. Drag Kestrel.app into Applications.
+2. Open Kestrel from Applications.
+3. Press Option–Space. If another launcher uses it, quit that launcher first.
+
+Type an app or folder name, a calculation such as = 12 * 8,
+clip to recall copied text, or snip to find saved snippets.
+Arrow keys select, Return opens or copies, Escape hides the launcher.
+Use the wing menu to open Settings or quit Kestrel.
+
+Clipboard history starts off. Enable it only if you want copied text
+saved locally in unencrypted storage. File search may need folder access.
+
+This preview is not Apple-notarized. After attempting to open a trusted
+download, use System Settings > Privacy & Security > Open Anyway if
+available. Managed Macs may not allow this; follow your organization's
+policy. Do not disable Gatekeeper or remove quarantine attributes to install it.
+
+Setup: https://github.com/junoh-bg/kestrel/blob/main/docs/getting-started.md
+Updates: https://github.com/junoh-bg/kestrel/releases
+
+To update, quit Kestrel, replace the app in Applications, and reopen it.
+To uninstall, quit and move the app to Trash. Saved data is retained.
