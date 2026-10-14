@@ -4,7 +4,7 @@ User-facing changes are recorded here. Release versions follow `MAJOR.MINOR.PATC
 
 ## [Unreleased]
 
-- Added a short product demo to the README, with an MP4 for sharing.
+- Added an English product demo covering app, folder and file search, daily tools, and theme customization, with a GIF in the README and an MP4 for sharing.
 
 ## [1.4.2] — 2026-10-14 · Open-source preview
 
