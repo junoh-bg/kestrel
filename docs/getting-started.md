@@ -14,7 +14,18 @@ Kestrel does not automatically start at login. If you want that behavior, add it
 
 The current preview is ad-hoc signed, **not signed with a Developer ID certificate or notarized by Apple**. A successful build or checksum does not change that status. macOS may block a downloaded copy.
 
-For a trusted copy that your organization permits, Apple documents the per-app **Privacy & Security → Open Anyway** flow in [Open apps safely on your Mac](https://support.apple.com/en-us/102445). You may need to attempt opening the app first. If your Mac is managed and does not allow the app, contact your IT team or wait for a notarized build. Do not disable Gatekeeper or remove quarantine attributes as part of setup. Stop if macOS reports malware or that the app is damaged.
+If the warning says Apple **cannot check Kestrel for malicious software** or **cannot verify its developer**, that describes a verification limitation; it is different from a warning that malware was detected. For a copy you trust from this repository and that your organization permits:
+
+1. Open Kestrel from **Applications** to trigger the warning, then dismiss it without moving the app to Trash.
+2. Open **System Settings → Privacy & Security** and scroll to **Security**.
+3. Click **Open Anyway** for Kestrel, complete any authentication, and confirm **Open** when prompted.
+4. Try **Option–Space**, or open Kestrel from the wing icon in the menu bar.
+
+These are Apple's [per-app approval steps](https://support.apple.com/en-us/102445). You do not need to delete Kestrel or run the packaging script for this approval. If **Open Anyway** is unavailable on a managed Mac, contact your IT team. Do not disable Gatekeeper or remove quarantine attributes as part of setup.
+
+If the warning says the app **will damage your computer**, **contains malware**, or **is damaged**, stop and [report the exact message](https://github.com/junoh-bg/kestrel/issues). Do not treat those warnings as the routine unnotarized-preview warning.
+
+If you choose to [build from source](development.md), `scripts/package.sh` creates `dist/Kestrel.app` but does not install it. Quit the old app and replace the copy in Applications with the newly built app. Keep your saved data; rebuilding does not notarize the downloaded ZIP.
 
 ## First-minute setup
 
