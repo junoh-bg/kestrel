@@ -30,9 +30,9 @@ The agent can handle installation, but macOS may still require **your approval**
 
 ### Download and install yourself
 
-[**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.4.2/Kestrel-1.4.2-macos-arm64.zip)
+[**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.5.0/Kestrel-1.5.0-macos-arm64.zip)
 
-v1.4.2 preview · [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.4.2) · [SHA-256 checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.4.2/Kestrel-1.4.2-macos-arm64.zip.sha256)
+v1.5.0 preview · [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.5.0) · [SHA-256 checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.5.0/Kestrel-1.5.0-macos-arm64.zip.sha256)
 
 1. Unzip the download and drag **Kestrel.app** into **Applications**.
 2. Open Kestrel. If macOS blocks it, follow the steps below.
@@ -64,11 +64,11 @@ The script creates `dist/Kestrel.app`; it does not install it. Quit Kestrel, mov
 
 ![Kestrel demo](docs/demo/kestrel-demo.gif)
 
-[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · English walkthrough of search and theme customization, using sample data.
+[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · v1.5 walkthrough of search and theme customization using sample data. Background blur varies with your desktop and accessibility settings.
 
 ## Use
 
-Type an app or folder name, `file report`, a Google query, `= 12 * 8`, `clip meeting`, or `snip signature`. Use **↑ / ↓** to select, **Return** to open or copy, and **Esc / ⌘ W** to dismiss.
+Type an app or folder name, `file report`, a Google query, `= 12 * 8`, `clip meeting`, or `snip signature`. Use **↑ / ↓** to select, **Return** to open or copy, and **Esc / ⌘ W** to dismiss. **⌘ K** opens actions for the selected result, such as Show in Finder or Copy Path.
 
 Open **Settings** from the wing menu to choose a theme, manage snippets, or enable optional clipboard history. File search uses Spotlight and may need folder access. Clipboard history starts off and stores unencrypted text locally when enabled. Selecting Google search sends that query to your browser; Kestrel has no telemetry or cloud sync.
 

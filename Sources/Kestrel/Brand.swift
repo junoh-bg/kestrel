@@ -2,24 +2,33 @@ import AppKit
 
 enum KestrelTheme: String, CaseIterable {
   case nightflight, evergreen, ember, paper, arctic
-  var title: String { rawValue.capitalized }
+  // Persisted raw values retain the user's palette family across upgrades.
+  var title: String {
+    switch self {
+    case .nightflight: return "Nightflight"
+    case .evergreen: return "Moss"
+    case .ember: return "Dusk"
+    case .paper: return "Linen"
+    case .arctic: return "Frost"
+    }
+  }
   var detail: String {
     switch self {
-    case .nightflight: return "Deep navy with periwinkle and lavender."
-    case .evergreen: return "Forest green with sage and soft gold."
-    case .ember: return "Warm burgundy with peach and amber."
-    case .paper: return "Light parchment with warm brown."
-    case .arctic: return "Cool white and ice blue with ink accents."
+    case .nightflight: return "Smoked navy with ice-blue accents."
+    case .evergreen: return "Deep forest with quiet sage accents."
+    case .ember: return "Smoked plum with soft rose accents."
+    case .paper: return "Warm mineral white with umber accents."
+    case .arctic: return "Frosted blue-white with slate accents."
     }
   }
   var isDark: Bool { ![.paper, .arctic].contains(self) }
   var colors: [Int] {
     switch self {
-    case .nightflight: return [0x111A2B, 0x1C2840, 0x9FB9FF, 0xC8B4EF, 0xE6ECFC, 0xA7B3D4]
-    case .evergreen: return [0x10251E, 0x19372C, 0x9AD9A8, 0xE4CA87, 0xE9F3E9, 0xAAC5B3]
-    case .ember: return [0x281B22, 0x3C2932, 0xFFA77D, 0xF2C879, 0xF8EBE6, 0xCFB5BE]
-    case .paper: return [0xF6F1E7, 0xFFFBF4, 0x825327, 0x744537, 0x2B2925, 0x625D52]
-    case .arctic: return [0xEDF4FA, 0xFFFFFF, 0x245B93, 0x5E4497, 0x172C43, 0x52677C]
+    case .nightflight: return [0x101D30, 0x24354B, 0x97D9EE, 0xC3E7F2, 0xF0F5FC, 0xB1C0D3]
+    case .evergreen: return [0x16251F, 0x2C3D32, 0xB6D1A5, 0xD8E5CB, 0xF0F4ED, 0xB8C8B9]
+    case .ember: return [0x281F32, 0x403348, 0xE0B0C9, 0xEDD2E0, 0xF7F0F8, 0xCBBCCC]
+    case .paper: return [0xF3F0E9, 0xE4DFD5, 0x795635, 0x65472D, 0x292825, 0x625C53]
+    case .arctic: return [0xEFF5F8, 0xDCE8EE, 0x28657C, 0x214F67, 0x1B3040, 0x4E6675]
     }
   }
 }
@@ -63,6 +72,10 @@ enum KestrelTheme: String, CaseIterable {
   private static func recolor(_ view: NSView, from old: KestrelTheme, to new: KestrelTheme) {
     // Theme previews intentionally retain their own palette.
     if view is ThemePreview { return }
+    if let material = view as? KestrelMaterialSurface {
+      material.updateTheme()
+      return
+    }
     // Treat AppKit rendering subviews as opaque. Our controls set their own
     // semantic colors explicitly rather than remapping resolved system colors.
     if let button = view as? NSButton {
@@ -153,13 +166,28 @@ enum KestrelTheme: String, CaseIterable {
     if window.appearance?.name != appearance {
       window.appearance = NSAppearance(named: appearance)
     }
-    window.backgroundColor = background
-    window.contentView?.wantsLayer = true
-    window.contentView?.layer?.backgroundColor = background.cgColor
+    window.isOpaque = false
+    // Standard title bars sit outside our material view. Give them a backing
+    // color so their title and controls never draw directly over the wallpaper.
+    window.backgroundColor = window.styleMask.contains(.fullSizeContentView) ? .clear : background
+    guard let content = window.contentView else { return }
+    content.wantsLayer = true
+    content.layer?.backgroundColor = NSColor.clear.cgColor
+    content.layer?.cornerRadius = window.styleMask.contains(.fullSizeContentView) ? 18 : 0
+    content.layer?.masksToBounds = true
+    if let material = content.subviews.compactMap({ $0 as? KestrelMaterialSurface }).first {
+      material.updateTheme()
+    } else {
+      content.addSubview(
+        KestrelMaterialSurface(frame: content.bounds), positioned: .below, relativeTo: nil)
+    }
   }
 }
 
 @MainActor final class KestrelResultRow: NSTableRowView {
+  // Our selection background is deliberately subtle, including in light palettes.
+  // Do not let AppKit substitute white template icons for a dark system selection.
+  override var interiorBackgroundStyle: NSView.BackgroundStyle { .normal }
   override var isEmphasized: Bool {
     get { true }
     set {}
@@ -169,10 +197,15 @@ enum KestrelTheme: String, CaseIterable {
     let rect = bounds.insetBy(dx: 2, dy: 1)
     KestrelBrand.surface.setFill()
     NSBezierPath(roundedRect: rect, xRadius: 9, yRadius: 9).fill()
-    KestrelBrand.highlight.withAlphaComponent(0.75).setStroke()
+    KestrelBrand.accent.withAlphaComponent(0.20).setStroke()
     let border = NSBezierPath(roundedRect: rect.insetBy(dx: 0.5, dy: 0.5), xRadius: 9, yRadius: 9)
     border.lineWidth = 1
     border.stroke()
+    KestrelBrand.accent.setFill()
+    NSBezierPath(
+      roundedRect: NSRect(x: rect.minX + 1, y: rect.midY - 10, width: 3, height: 20), xRadius: 1.5,
+      yRadius: 1.5
+    ).fill()
   }
 }
 
@@ -247,6 +280,12 @@ enum KestrelTheme: String, CaseIterable {
   required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
   var titleColor: NSColor { KestrelBrand.text }
   var usesPaletteBackground: Bool { true }
+  override var intrinsicContentSize: NSSize {
+    guard usesPaletteBackground else { return super.intrinsicContentSize }
+    let text = attributedTitle.size()
+    // Borderless native cells otherwise collapse to the text bounds.
+    return NSSize(width: max(64, ceil(text.width) + 24), height: max(28, ceil(text.height) + 10))
+  }
   func updateTheme() {
     if usesPaletteBackground {
       bezelStyle = .recessed
@@ -265,6 +304,7 @@ enum KestrelTheme: String, CaseIterable {
         .font: font ?? NSFont.systemFont(ofSize: NSFont.systemFontSize),
       ])
     attributedAlternateTitle = attributedTitle
+    invalidateIntrinsicContentSize()
   }
 }
 

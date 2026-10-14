@@ -16,19 +16,36 @@ struct LauncherRow {
 
 final class KeyPanel: NSPanel {
   var onDismiss: (() -> Void)?
+  var onActions: (() -> Void)?
   override func cancelOperation(_ sender: Any?) { onDismiss?() }
   override func close() { onDismiss?() }
   override func performKeyEquivalent(with event: NSEvent) -> Bool {
     let modifiers = event.modifierFlags.intersection([.command, .control, .option, .shift])
-    let commandW = modifiers == .command && event.charactersIgnoringModifiers?.lowercased() == "w"
+    let character = event.charactersIgnoringModifiers?.lowercased()
+    let nonLatinInput = character?.unicodeScalars.contains { !$0.isASCII } == true
+    // Input methods can report Hangul here even while Command is held.
+    // Keep character-based shortcuts for Latin layouts; use their physical key for IMEs.
+    let commandW =
+      modifiers == .command && (character == "w" || (nonLatinInput && event.keyCode == 13))
     if event.keyCode == 53 || commandW {
       onDismiss?()
+      return true
+    }
+    if modifiers == .command && (character == "k" || (nonLatinInput && event.keyCode == 40)),
+      let onActions
+    {
+      onActions()
       return true
     }
     return super.performKeyEquivalent(with: event)
   }
   override var canBecomeKey: Bool { true }
   override var canBecomeMain: Bool { false }
+}
+
+@MainActor private final class LauncherMenuAction: NSObject {
+  let invoke: () -> Void
+  init(_ invoke: @escaping () -> Void) { self.invoke = invoke }
 }
 
 @MainActor
@@ -51,17 +68,27 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
   private var currentQuery = ""
   private var selectedKey: String?
   private var reloading = false
+  private let resultsScroll = NSScrollView()
+  private let emptyLabel = NSTextField(
+    labelWithString: "No indexed matches. Try a shorter name or check Search in Settings.")
+  private var resultsHeight: NSLayoutConstraint!
+  private let primaryButton = KestrelInlineButton(title: "Open ↵", target: nil, action: nil)
+  private let actionsButton = KestrelInlineButton(title: "Actions ⌘K", target: nil, action: nil)
   var searchAccessMessage = "Search access unverified · Open Settings to check" {
-    didSet { searchNotice.stringValue = searchAccessMessage }
+    didSet {
+      searchNotice.stringValue = searchAccessMessage
+      resultsScroll.toolTip = searchAccessMessage
+    }
   }
   init(model: AppModel, catalog: AppCatalog) {
     self.model = model
     self.catalog = catalog
     panel = KeyPanel(
-      contentRect: NSRect(x: 0, y: 0, width: 660, height: 560),
+      contentRect: NSRect(x: 0, y: 0, width: 660, height: 126),
       styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
     super.init()
     panel.onDismiss = { [weak self] in self?.dismiss() }
+    panel.onActions = { [weak self] in self?.showActions() }
     panel.title = "Kestrel"
     panel.titleVisibility = .hidden
     panel.titlebarAppearsTransparent = true
@@ -74,9 +101,9 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
   }
   private func buildUI() {
     guard let content = panel.contentView else { return }
-    let heading = NSTextField(labelWithString: "Kestrel")
-    heading.font = .systemFont(ofSize: 16, weight: .semibold)
-    heading.textColor = KestrelBrand.text
+    panel.standardWindowButton(.closeButton)?.isHidden = true
+    panel.standardWindowButton(.miniaturizeButton)?.isHidden = true
+    panel.standardWindowButton(.zoomButton)?.isHidden = true
     let mark = NSImageView()
     mark.image = KestrelBrand.mark(size: 28)
     mark.translatesAutoresizingMaskIntoConstraints = false
@@ -85,73 +112,178 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
     input.placeholderAttributedString = NSAttributedString(
       string: "Search apps, files, or Google",
       attributes: [
-        .font: NSFont.systemFont(ofSize: 25, weight: .medium), .foregroundColor: KestrelBrand.muted,
+        .font: NSFont.systemFont(ofSize: 22, weight: .regular),
+        .foregroundColor: KestrelBrand.muted,
       ])
-    input.font = .systemFont(ofSize: 25, weight: .medium)
+    input.font = .systemFont(ofSize: 22, weight: .regular)
     input.isBordered = false
     input.focusRingType = .none
     input.drawsBackground = false
     input.textColor = KestrelBrand.text
     input.delegate = self
     input.maximumNumberOfLines = 1
+    input.setAccessibilityLabel("Search Kestrel")
+    input.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    let close = KestrelInlineButton(title: "Close ×", target: self, action: #selector(dismiss))
+    close.toolTip = "Hide Kestrel (Escape or Command–W)"
+    let header = NSStackView(views: [mark, input, close])
+    header.orientation = .horizontal
+    header.spacing = 12
+    header.heightAnchor.constraint(equalToConstant: 64).isActive = true
+
     let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier("result"))
     table.addTableColumn(column)
     table.headerView = nil
-    table.rowHeight = 57
+    table.rowHeight = 52
     table.intercellSpacing = NSSize(width: 0, height: 4)
     table.backgroundColor = .clear
     table.delegate = self
     table.dataSource = self
     table.target = self
     table.doubleAction = #selector(performSelected)
-    let scroll = NSScrollView()
-    scroll.documentView = table
-    scroll.hasVerticalScroller = true
-    scroll.drawsBackground = false
+    resultsScroll.documentView = table
+    resultsScroll.hasVerticalScroller = true
+    resultsScroll.autohidesScrollers = true
+    resultsScroll.drawsBackground = false
+    resultsScroll.toolTip = searchAccessMessage
+    emptyLabel.font = .systemFont(ofSize: 12)
+    emptyLabel.textColor = KestrelBrand.muted
+    emptyLabel.lineBreakMode = .byTruncatingTail
+    emptyLabel.alignment = .center
+    resultsScroll.addSubview(emptyLabel)
+    emptyLabel.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      emptyLabel.leadingAnchor.constraint(equalTo: resultsScroll.leadingAnchor, constant: 8),
+      emptyLabel.trailingAnchor.constraint(equalTo: resultsScroll.trailingAnchor, constant: -8),
+      emptyLabel.centerYAnchor.constraint(equalTo: resultsScroll.centerYAnchor),
+    ])
+    resultsHeight = resultsScroll.heightAnchor.constraint(equalToConstant: 0)
+    resultsHeight.isActive = true
+
     footer.font = .systemFont(ofSize: 11)
     footer.textColor = KestrelBrand.muted
+    footer.lineBreakMode = .byTruncatingTail
+    footer.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     let settings = KestrelInlineButton(
       title: "Settings", target: self, action: #selector(openSettings))
-    settings.bezelStyle = .inline
-    settings.updateTheme()
-    let bottom = NSStackView(views: [footer, NSView(), settings])
+    primaryButton.target = self
+    primaryButton.action = #selector(performSelected)
+    actionsButton.target = self
+    actionsButton.action = #selector(showActions)
+    actionsButton.toolTip = "Actions for the selected result (Command–K)"
+    for button in [settings, primaryButton, actionsButton, close] {
+      button.bezelStyle = .inline
+      button.updateTheme()
+      button.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+    let bottom = NSStackView(views: [settings, footer, NSView(), primaryButton, actionsButton])
     bottom.orientation = .horizontal
+    bottom.spacing = 14
+    bottom.heightAnchor.constraint(equalToConstant: 38).isActive = true
     let divider = NSBox()
     divider.boxType = .separator
-    let close = KestrelInlineButton(title: "Close ×", target: self, action: #selector(dismiss))
-    close.bezelStyle = .inline
-    close.updateTheme()
-    close.toolTip = "Hide Kestrel (Escape or Command–W)"
-    let header = NSStackView(views: [mark, heading, NSView(), close])
-    header.orientation = .horizontal
-    searchNotice.font = .systemFont(ofSize: 11)
-    searchNotice.textColor = KestrelBrand.muted
-    let stack = NSStackView(views: [header, input, divider, scroll, searchNotice, bottom])
+    let stack = NSStackView(views: [header, resultsScroll, divider, bottom])
     stack.orientation = .vertical
     stack.alignment = .leading
-    stack.spacing = 14
+    stack.spacing = 4
     content.addSubview(stack)
     stack.translatesAutoresizingMaskIntoConstraints = false
-    scroll.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
-      stack.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 24),
-      stack.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -24),
-      stack.topAnchor.constraint(equalTo: content.topAnchor, constant: 28),
-      stack.bottomAnchor.constraint(equalTo: content.bottomAnchor, constant: -18),
+      stack.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 16),
+      stack.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -16),
+      stack.topAnchor.constraint(equalTo: content.topAnchor, constant: 4),
+      stack.bottomAnchor.constraint(equalTo: content.bottomAnchor, constant: -7),
       header.widthAnchor.constraint(equalTo: stack.widthAnchor),
       divider.widthAnchor.constraint(equalTo: stack.widthAnchor),
-      input.widthAnchor.constraint(equalTo: stack.widthAnchor),
-      scroll.widthAnchor.constraint(equalTo: stack.widthAnchor),
-      scroll.heightAnchor.constraint(greaterThanOrEqualToConstant: 300),
+      resultsScroll.widthAnchor.constraint(equalTo: stack.widthAnchor),
       bottom.widthAnchor.constraint(equalTo: stack.widthAnchor),
-      searchNotice.widthAnchor.constraint(equalTo: stack.widthAnchor),
     ])
+    updatePresentation()
+  }
+
+  private func updatePresentation() {
+    let resultHeight: CGFloat = currentQuery.isEmpty ? 0 : CGFloat(max(1, min(rows.count, 7))) * 56
+    resultsHeight.constant = resultHeight
+    emptyLabel.isHidden = !rows.isEmpty || currentQuery.isEmpty
+    emptyLabel.setAccessibilityHidden(emptyLabel.isHidden)
+    var frame = panel.frame
+    let height: CGFloat = 126 + resultHeight
+    frame.origin.y = frame.maxY - height
+    frame.size.height = height
+    panel.setFrame(frame, display: true)
+    updateActions()
+  }
+
+  private func primaryTitle(for row: LauncherRow) -> String? {
+    switch row.action {
+    case .open(let candidate):
+      switch candidate.kind {
+      case .application: return "Open Application"
+      case .folder: return "Open Folder"
+      case .file: return "Open File"
+      }
+    case .copy(let text): return text.isEmpty ? nil : "Copy Result"
+    case .google: return "Search Google"
+    case .settings: return "Open Settings"
+    }
+  }
+
+  private func updateActions() {
+    guard rows.indices.contains(table.selectedRow),
+      let title = primaryTitle(for: rows[table.selectedRow])
+    else {
+      primaryButton.isHidden = true
+      actionsButton.isHidden = true
+      actionsButton.menu = nil
+      return
+    }
+    let row = rows[table.selectedRow]
+    let query = currentQuery
+    primaryButton.title = title + " ↵"
+    primaryButton.updateTheme()
+    primaryButton.isHidden = false
+    actionsButton.isHidden = false
+    let menu = NSMenu(title: "Actions")
+    menu.autoenablesItems = false
+    func add(_ title: String, _ invoke: @escaping () -> Void) {
+      let item = NSMenuItem(
+        title: title, action: #selector(invokeMenuAction(_:)), keyEquivalent: "")
+      item.target = self
+      item.representedObject = LauncherMenuAction(invoke)
+      menu.addItem(item)
+    }
+    // Snapshot the result and query: delayed search results must not retarget an open menu.
+    add(title) { [weak self] in self?.perform(row, query: query) }
+    if case .open(let candidate) = row.action {
+      menu.addItem(.separator())
+      add("Show in Finder") { [weak self] in
+        NSWorkspace.shared.activateFileViewerSelecting([candidate.url])
+        self?.dismiss()
+      }
+      add("Copy Path") { [weak self] in
+        self?.model.copy(candidate.url.path)
+        self?.footer.stringValue = "Path copied"
+      }
+    }
+    actionsButton.menu = menu
+  }
+
+  @objc private func invokeMenuAction(_ sender: NSMenuItem) {
+    (sender.representedObject as? LauncherMenuAction)?.invoke()
+  }
+
+  @objc private func showActions() {
+    guard !actionsButton.isHidden, let menu = actionsButton.menu else { return }
+    menu.popUp(
+      positioning: nil, at: NSPoint(x: 0, y: actionsButton.bounds.maxY + 6), in: actionsButton)
   }
   func show() {
     if let screen = NSScreen.main {
       let frame = screen.visibleFrame
+      // Leave room below the idle panel for its maximum result height.
+      let top = min(frame.maxY - 16, max(frame.midY + 143, frame.minY + 534))
       panel.setFrameOrigin(
-        NSPoint(x: frame.midX - panel.frame.width / 2, y: frame.midY - panel.frame.height / 2 + 80))
+        NSPoint(x: frame.midX - panel.frame.width / 2, y: top - panel.frame.height))
     }
     NSApp.activate(ignoringOtherApps: true)
     panel.makeKeyAndOrderFront(nil)
@@ -195,7 +327,7 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
     let query = currentQuery
     footer.stringValue =
       model.errorMessage ?? model.startupWarning
-      ?? "⌥Space · ↑↓ select · Return open · Esc / ⌘W close"
+      ?? (query.isEmpty ? "Type clip for history · snip for snippets" : "↑↓ select · Esc close")
     if query == "clip" || query.hasPrefix("clip ") {
       let filter = String(query.dropFirst(4)).trimmingCharacters(in: .whitespaces)
       rows = model.state.history.filter {
@@ -286,19 +418,7 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
         SearchRanking.rank(catalog.candidates, query: term, events: model.state.usage).prefix(10))
     let folders = FolderCatalog.candidates(additionalScopes: files.additionalScopes)
     rows = browsingRows(apps: apps, folders: folders, indexed: [], term: term, fileOnly: fileOnly)
-    if query.isEmpty {
-      rows = apps.prefix(7).map {
-        LauncherRow(title: $0.title, subtitle: $0.subtitle, symbol: "app", action: .open($0))
-      }
-      rows.append(
-        LauncherRow(
-          title: "Clipboard history", subtitle: "Type clip · searchable local history",
-          symbol: "doc.on.clipboard", action: .copy("")))
-      rows.append(
-        LauncherRow(
-          title: "Saved snippets", subtitle: "Type snip · reusable text", symbol: "text.badge.plus",
-          action: .copy("")))
-    }
+    if query.isEmpty { rows = [] }
     reload()
     guard term.count >= 2 else { return }
     let work = DispatchWorkItem { [weak self] in
@@ -377,7 +497,10 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
   }
   private func reload() {
     reloading = true
-    defer { reloading = false }
+    defer {
+      reloading = false
+      updatePresentation()
+    }
     table.reloadData()
     if !rows.isEmpty {
       let previousIndex = rows.firstIndex { key($0) == selectedKey }
@@ -388,8 +511,9 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
     }
   }
   func tableViewSelectionDidChange(_ notification: Notification) {
-    guard !reloading, rows.indices.contains(table.selectedRow) else { return }
-    selectedKey = key(rows[table.selectedRow])
+    guard !reloading else { return }
+    selectedKey = rows.indices.contains(table.selectedRow) ? key(rows[table.selectedRow]) : nil
+    updateActions()
   }
   private func preview(_ text: String) -> String {
     String(text.replacingOccurrences(of: "\n", with: " ↵ ").prefix(100))
@@ -411,7 +535,7 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
     icon.translatesAutoresizingMaskIntoConstraints = false
     icon.widthAnchor.constraint(equalToConstant: 26).isActive = true
     let title = NSTextField(labelWithString: result.title)
-    title.font = .systemFont(ofSize: 15, weight: .medium)
+    title.font = .systemFont(ofSize: 14, weight: .medium)
     title.lineBreakMode = .byTruncatingTail
     title.textColor = KestrelBrand.text
     let subtitle = NSTextField(labelWithString: result.subtitle)
@@ -430,7 +554,10 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
   }
   @objc func performSelected() {
     guard rows.indices.contains(table.selectedRow) else { return }
-    let row = rows[table.selectedRow]
+    perform(rows[table.selectedRow], query: currentQuery)
+  }
+
+  private func perform(_ row: LauncherRow, query: String) {
     switch row.action {
     case .open(let candidate):
       guard NSWorkspace.shared.open(candidate.url) else {
@@ -439,21 +566,9 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
       }
       model.record(
         candidate,
-        query: currentQuery.hasPrefix("file ") ? String(currentQuery.dropFirst(5)) : currentQuery)
+        query: query.hasPrefix("file ") ? String(query.dropFirst(5)) : query)
     case .copy(let text):
-      if text.isEmpty {
-        if row.title == "Clipboard history" {
-          input.stringValue = "clip"
-          updateSearch()
-          return
-        }
-        if row.title == "Saved snippets" {
-          input.stringValue = "snip"
-          updateSearch()
-          return
-        }
-        return
-      }
+      guard !text.isEmpty else { return }
       model.copy(text)
     case .google(let url):
       guard NSWorkspace.shared.open(url) else {

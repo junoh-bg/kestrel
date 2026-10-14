@@ -49,7 +49,7 @@ final class SettingsWindow: NSObject, NSTableViewDataSource, NSTableViewDelegate
     self.model = model
     super.init()
     window.delegate = self
-    window.titlebarAppearsTransparent = true
+    window.titlebarAppearsTransparent = false
     window.title = "Kestrel Settings"
     window.isReleasedWhenClosed = false
     KestrelBrand.apply(to: window)
@@ -255,7 +255,7 @@ final class SettingsWindow: NSObject, NSTableViewDataSource, NSTableViewDelegate
           "About",
           rows: [
             row(
-              "Kestrel", detail: "Nightflight • Native macOS launcher",
+              "Kestrel", detail: "Everyday tools, one shortcut away",
               control: label(version, muted: true))
           ]),
       ])
@@ -333,7 +333,7 @@ final class SettingsWindow: NSObject, NSTableViewDataSource, NSTableViewDelegate
     pages[.appearance] = page(
       "Appearance",
       subtitle:
-        "Choose a palette for the launcher and Settings. Changes apply immediately and are saved on this Mac.",
+        "Choose a color palette for search and Settings. Changes apply immediately.",
       views: [group("Color theme", rows: themes)])
   }
 

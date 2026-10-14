@@ -601,12 +601,13 @@ import Testing
   let settings = SettingsWindow(model: model)
   let content = try #require(settings.window.contentView)
   try #require(settingsButton("Appearance", in: content)).performClick(nil)
-  for name in ["Evergreen", "Ember", "Paper", "Arctic"] {
+  for name in ["Moss", "Dusk", "Linen", "Frost"] {
     #expect(settingsButton("Use " + name, in: content) != nil)
   }
-  let previous = settings.window.backgroundColor
-  try #require(settingsButton("Use Paper", in: content)).performClick(nil)
-  #expect(settings.window.backgroundColor != previous)
+  let material = try #require(content.subviews.first { $0 is KestrelMaterialSurface })
+  let previous = material.subviews.last?.layer?.backgroundColor
+  try #require(settingsButton("Use Linen", in: content)).performClick(nil)
+  #expect(material.subviews.last?.layer?.backgroundColor != previous)
   let restored = try AppModel(directory: directory, pasteboard: .withUniqueName())
   let json = try #require(
     JSONSerialization.jsonObject(with: JSONEncoder().encode(restored.state)) as? [String: Any])
@@ -624,7 +625,7 @@ import Testing
   settings.titleField.stringValue = "Unsaved theme check"
   settings.bodyField.string = "Keep this draft"
   try #require(settingsButton("Appearance", in: content)).performClick(nil)
-  try #require(settingsButton("Use Evergreen", in: content)).performClick(nil)
+  try #require(settingsButton("Use Moss", in: content)).performClick(nil)
   #expect(!model.captureEnabled)
   #expect(settings.hasUnsavedChanges)
   try #require(settingsButton("Snippets", in: content)).performClick(nil)
@@ -725,6 +726,8 @@ import Testing
         let button = try #require(settingsButton(title, in: content))
         let rect = button.convert(button.bounds, to: content)
         #expect(abs(rect.maxX - (content.bounds.maxX - 44)) < 2)
+        #expect(rect.height >= 28, "Action buttons need comfortable vertical padding")
+        #expect(rect.width >= button.attributedTitle.size().width + 20)
       }
     }
   }
@@ -796,7 +799,7 @@ import Testing
     try #require(settingsButton("Use " + theme.title, in: content)).performClick(nil)
     content.layoutSubtreeIfNeeded()
     let button = try #require(
-      settingsButton("Use " + (theme == .ember ? "Paper" : "Ember"), in: content))
+      settingsButton("Use " + (theme == .ember ? "Linen" : "Dusk"), in: content))
     settings.window.effectiveAppearance.performAsCurrentDrawingAppearance {
       if let bitmap = button.bitmapImageRepForCachingDisplay(in: button.bounds) {
         button.cacheDisplay(in: button.bounds, to: bitmap)
@@ -845,7 +848,7 @@ import Testing
     try #require(settingsButton("Appearance", in: content)).performClick(nil)
     try #require(settingsButton("Use " + theme.title, in: content)).performClick(nil)
     let action = try #require(
-      settingsButton("Use " + (theme == .paper ? "Arctic" : "Paper"), in: content))
+      settingsButton("Use " + (theme == .paper ? "Frost" : "Linen"), in: content))
     let expected = KestrelBrand.text
     let color =
       action.attributedTitle.attribute(.foregroundColor, at: 0, effectiveRange: nil) as? NSColor
