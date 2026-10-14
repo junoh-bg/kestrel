@@ -4,6 +4,11 @@ User-facing changes are recorded here. Release versions follow `MAJOR.MINOR.PATC
 
 ## [Unreleased]
 
+- Refreshed all five themes: Nightflight, Moss, Dusk, Linen, and Frost. Search and Settings share a soft glass surface, with an opaque fallback when Reduce Transparency is enabled.
+- Made the launcher compact when idle and sized results to their content, up to seven visible rows.
+- Added contextual primary actions and Command–K actions, including Show in Finder and Copy Path for apps, files, and folders.
+- Fixed selected folder icon contrast in light themes and launcher shortcuts with Korean input enabled.
+
 - Added an English product demo covering app, folder and file search, daily tools, and theme customization, with a GIF in the README and an MP4 for sharing.
 
 ## [1.4.2] — 2026-10-14 · Open-source preview

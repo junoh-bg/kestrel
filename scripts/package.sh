@@ -13,7 +13,7 @@ mkdir -p "$APP_OUTPUT/Contents/MacOS" "$APP_OUTPUT/Contents/Resources" dist/Kest
 cp "$BINARY_DIR/Kestrel" "$APP_OUTPUT/Contents/MacOS/Kestrel"
 # Remove build-machine paths from debug symbols before the final signature.
 strip -S "$APP_OUTPUT/Contents/MacOS/Kestrel"
-xcrun swiftc Sources/Kestrel/Brand.swift scripts/MakeIcon.swift -o dist/make-icon
+xcrun swiftc Sources/Kestrel/Brand.swift Sources/Kestrel/MaterialSurface.swift scripts/MakeIcon.swift -o dist/make-icon
 dist/make-icon "$(pwd)/dist/Kestrel.iconset"
 iconutil -c icns dist/Kestrel.iconset -o "$APP_OUTPUT/Contents/Resources/Kestrel.icns"
 python3 -B scripts/release_metadata.py --write-plist "$APP_OUTPUT/Contents/Info.plist"
