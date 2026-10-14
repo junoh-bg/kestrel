@@ -4,6 +4,8 @@ User-facing changes are recorded here. Release versions follow `MAJOR.MINOR.PATC
 
 ## [Unreleased]
 
+- Added a short product demo to the README, with an MP4 for sharing.
+
 ## [1.4.2] — 2026-10-14 · Open-source preview
 
 - Added a concise product guide and separate setup help.

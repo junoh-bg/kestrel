@@ -8,6 +8,10 @@ A native Mac launcher for opening apps, finding files, searching Google, calcula
 
 **macOS 14+ · Apple silicon · Free and open source**
 
+![Kestrel demo](docs/demo/kestrel-demo.gif)
+
+[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · Native app UI with sample data.
+
 ## Install
 
 [**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.4.2/Kestrel-1.4.2-macos-arm64.zip)
