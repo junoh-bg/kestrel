@@ -25,7 +25,7 @@ Replace `<version>` with the selected release's exact version. Stop on a mismatc
 - Quit a running Kestrel normally, allowing the user to resolve any unsaved snippet draft.
 - Keep a recoverable copy of the previous app before replacing it. Install in `/Applications`; if macOS requires authorization, let the user complete it. Do not silently choose a second installation location.
 - Preserve `~/Library/Application Support/LocalPilot/` and all existing permissions and preferences. Never copy personal application data into the source checkout or release archive.
-- Open the installed app. If blocked, explain Apple's per-app **Privacy & Security → Open Anyway** process from the setup guide and let the user decide. Do not disable Gatekeeper, remove quarantine, override organizational policy, or bypass malware/damaged-app warnings.
+- Open the installed app. If blocked, establish the exact warning before suggesting a remedy. An alert that Apple cannot check for malicious software or verify the developer is different from one that reports malware, damage, or that the app will damage the computer. For the former, explain the numbered **Privacy & Security → Open Anyway** steps in the [first-launch guide](getting-started.md#first-launch) and leave approval to the user. Do not delete the app or switch to a source build just to avoid the approval step. Do not disable Gatekeeper, remove quarantine, override organizational policy, or bypass malware/damaged-app warnings.
 
 ## 4. Verify and hand off
 

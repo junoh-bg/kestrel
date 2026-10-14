@@ -8,19 +8,45 @@ A native Mac launcher for opening apps, finding files and folders, searching Goo
 
 **macOS 14+ · Apple silicon · Free and open source**
 
-![Kestrel demo](docs/demo/kestrel-demo.gif)
-
-[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · English walkthrough of search and theme customization, using sample data.
-
 ## Install
+
+### Set up with an AI agent
+
+Use **Claude Code, Codex, or another coding agent on your Mac**? Paste this prompt:
+
+```text
+Install Kestrel from https://github.com/junoh-bg/kestrel.
+Read README.md and docs/agent-setup.md, check my Mac's compatibility,
+and use the published app ZIP unless I ask to build from source.
+Verify the download checksum, preserve any existing Kestrel data,
+install the app, and help me test Option–Space. If macOS blocks the
+unnotarized preview, explain the warning and guide me through the
+per-app Open Anyway steps; leave security approvals to me.
+Keep clipboard history off unless I opt in. Report the installed
+version, checks completed, and any unfinished steps.
+```
+
+The agent can handle installation, but macOS may still require **your approval**. A browser-only chat can guide you but cannot install the app. [Agent setup guide](docs/agent-setup.md).
+
+### Download and install yourself
 
 [**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.4.2/Kestrel-1.4.2-macos-arm64.zip)
 
 v1.4.2 preview · [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.4.2) · [SHA-256 checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.4.2/Kestrel-1.4.2-macos-arm64.zip.sha256)
 
-Unzip the download, drag **Kestrel.app** into **Applications**, and open it. Press **Option–Space** to start. If another launcher uses that shortcut, quit it or change its shortcut.
+1. Unzip the download and drag **Kestrel.app** into **Applications**.
+2. Open Kestrel. If macOS blocks it, follow the steps below.
+3. Press **Option–Space**. If another launcher uses that shortcut, quit it or change its shortcut.
 
-This open-source preview is not Apple-notarized. If macOS blocks it, a trusted download may be opened through **System Settings → Privacy & Security → Open Anyway**. [Setup help](docs/getting-started.md#first-launch).
+#### macOS first-launch warning
+
+**This preview is not Apple-notarized.** You may see a warning that Apple cannot check Kestrel for malicious software or cannot verify its developer. For a copy you trust from this repository:
+
+1. Attempt to open Kestrel, then dismiss the warning without moving it to Trash.
+2. Open **System Settings → Privacy & Security**, scroll to **Security**, and click **Open Anyway** for Kestrel.
+3. Complete any authentication and confirm **Open** when prompted.
+
+No deletion or rebuild is needed for this approval. If your work Mac does not allow it, contact IT. If the warning says the app **will damage your computer** or **is damaged**, stop and [report the exact message](https://github.com/junoh-bg/kestrel/issues). [Apple’s guidance](https://support.apple.com/en-us/102445) · [Setup help](docs/getting-started.md#first-launch).
 
 ### Build from source
 
@@ -32,23 +58,13 @@ cd kestrel
 ./scripts/package.sh
 ```
 
-Move `dist/Kestrel.app` into Applications and open it.
+The script creates `dist/Kestrel.app`; it does not install it. Quit Kestrel, move the built app into **Applications**, replace the previous app if present, and open it. Saved data is kept separately. A local build does not notarize the published ZIP.
 
-### Set up with an AI agent
+## Demo
 
-Paste this into **Claude Code, Codex, or another coding agent with access to your Mac**:
+![Kestrel demo](docs/demo/kestrel-demo.gif)
 
-```text
-Install Kestrel from https://github.com/junoh-bg/kestrel.
-Read README.md and docs/agent-setup.md, check my Mac's compatibility,
-and use the published app ZIP unless I ask to build from source.
-Verify the download checksum, preserve any existing Kestrel data,
-install the app, and help me test Option–Space. Explain any macOS
-approval I need to complete. Keep clipboard history off unless I opt in.
-Report the installed version and any unfinished steps.
-```
-
-[Agent setup guide](docs/agent-setup.md) · A browser-only chat can guide you but cannot install the app for you.
+[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · English walkthrough of search and theme customization, using sample data.
 
 ## Use
 
