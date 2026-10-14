@@ -45,10 +45,16 @@ These are captures of the native views with the opaque accessibility fallback en
 
 Review found and fixed low-contrast selected folder icons in light themes, stale actions after deselection, Command shortcuts receiving Hangul characters when Korean input is active, and a transparent Settings title bar outside the content material. Menu actions capture their result and query so asynchronous search updates cannot retarget an already-open menu.
 
+The follow-up preview exposed a harness error: it reset the global palette directly while the Settings model and cached pages still held Frost. The harness now uses the actual Settings action for every transition and checks model/rendered agreement. New regressions inspect reattached page headings and Search group backgrounds. This mismatch was not reproduced through the normal Settings theme controls.
+
+Settings actions now have a minimum 28-point height and 12 points of horizontal padding per side; theme choices retain their compact 80-point width. The material tint is lighter than the first pass, while solid control surfaces preserve readability. Layout checks cover all five palettes at 880, 960, and 1200 points wide. The standard title bar has an opaque backing outside the content's material.
+
+![Settings controls with padding](../images/design-settings-preview.png)
+
 Verification on the development Mac:
 
-- 71 Swift tests passed (12 core, 59 native), including asynchronous search selection, isolated clipboard actions, all-palette contrast and controls, opaque fallback, and Korean-input shortcuts.
+- 72 Swift tests passed (12 core, 60 native), including asynchronous search selection, isolated clipboard actions, all-palette contrast and controls, opaque fallback, and Korean-input shortcuts.
 - Three packaging tests passed; release build, app packaging, signature verification, packaged smoke test, strict Swift formatting lint, and `git diff --check` passed.
-- Native launcher and minimum-width Settings captures inspected for all five palettes. Live checks confirmed the glass surface, arrow-key selection, click-open actions, Command–K with Korean input, Settings navigation, and Linen → Frost → Nightflight transitions. The Mac subsequently locked, so the final live Command–W and corrected title-bar checks remain pending; their native regression tests passed.
+- Native launcher and minimum-width Settings captures inspected for all five palettes. Live checks confirmed the glass surface, arrow-key selection, click-open actions, Command–K with Korean input, Settings navigation, and Linen → Frost → Nightflight transitions. Follow-up live checks confirmed Command–W dismissal and a backed native title bar. All Settings sections were captured across the five themes; live Search checks covered dark, warm-light, and cool-light palettes.
 
 This branch is a design review candidate. It has not replaced the installed app or published a new release. The existing downloadable preview and its demo remain unchanged. Before distributing this design, assign a new minor version/build, prepare its release notes and updated demo, and validate the packaged app on the supported macOS versions. No proprietary reference code or assets are included.

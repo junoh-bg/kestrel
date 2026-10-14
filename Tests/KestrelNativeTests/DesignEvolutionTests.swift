@@ -92,6 +92,7 @@ import Testing
       // A conventional title bar sits outside the content material and needs its own background.
       if !window.styleMask.contains(.fullSizeContentView) {
         #expect(!window.titlebarAppearsTransparent)
+        #expect(window.backgroundColor.alphaComponent == 1)
       }
       #expect(window.appearance?.name == (theme.isDark ? .darkAqua : .aqua))
     }
@@ -217,4 +218,50 @@ import Testing
   }
   #expect(actions == 1)
   #expect(dismissals == 1)
+}
+
+@Test @MainActor func settingsPageContentKeepsItsPaletteWhenReattached() throws {
+  let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+  defer {
+    try? FileManager.default.removeItem(at: directory)
+    KestrelBrand.setTheme(.nightflight)
+  }
+  KestrelBrand.setTheme(.nightflight)
+  let model = try AppModel(directory: directory, pasteboard: .withUniqueName())
+  let settings = SettingsWindow(model: model)
+  let content = try #require(settings.window.contentView)
+  func click(_ title: String) throws {
+    let button = try #require(
+      descendant(of: NSButton.self, in: content).first {
+        $0.accessibilityLabel() == title || $0.title == title
+      })
+    button.performClick(nil)
+  }
+  // The selected palette must reach cached pages as well as the attached page.
+  for theme in [KestrelTheme.paper, .arctic, .nightflight, .evergreen, .ember, .nightflight] {
+    try click("Appearance")
+    try click("Use " + theme.title)
+    #expect(model.theme == theme)
+    #expect(KestrelBrand.theme == theme)
+    for section in ["General", "Search", "Clipboard", "Snippets", "Appearance"] {
+      try click(section)
+      let fields = descendant(of: NSTextField.self, in: content)
+      let heading = try #require(fields.first { $0.stringValue == section })
+      #expect(heading.textColor == KestrelBrand.text, "\(theme.title): \(section) heading")
+      if section == "Search" {
+        let field = try #require(fields.first { $0.stringValue == "Access all protected folders" })
+        var parent = field.superview
+        var groupColor: CGColor?
+        while let view = parent {
+          if view.layer?.cornerRadius == 10 {
+            groupColor = view.layer?.backgroundColor
+            break
+          }
+          parent = view.superview
+        }
+        #expect(groupColor == KestrelBrand.surface.cgColor)
+        #expect(settings.searchAccessStatus.textColor == KestrelBrand.text)
+      }
+    }
+  }
 }

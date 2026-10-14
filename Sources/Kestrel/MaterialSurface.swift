@@ -34,7 +34,7 @@ import AppKit
     effect.isHidden = opaque
     tint.layer?.backgroundColor =
       KestrelBrand.background.withAlphaComponent(
-        opaque ? 1 : (KestrelBrand.theme.isDark ? 0.86 : 0.92)
+        opaque ? 1 : (KestrelBrand.theme.isDark ? 0.70 : 0.80)
       ).cgColor
   }
 

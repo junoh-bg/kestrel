@@ -726,6 +726,8 @@ import Testing
         let button = try #require(settingsButton(title, in: content))
         let rect = button.convert(button.bounds, to: content)
         #expect(abs(rect.maxX - (content.bounds.maxX - 44)) < 2)
+        #expect(rect.height >= 28, "Action buttons need comfortable vertical padding")
+        #expect(rect.width >= button.attributedTitle.size().width + 20)
       }
     }
   }

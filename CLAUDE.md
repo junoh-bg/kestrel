@@ -15,3 +15,5 @@ Treat AppKit control internals as opaque when updating themes. Verify live light
 All palettes share the same layout, interaction model, and material treatment. Preserve persisted theme IDs when changing display names. Respect Reduce Transparency with an opaque surface. Custom result selection must retain legible template icons in light themes.
 
 Launcher Command shortcuts must work with non-Latin input methods as well as Latin layouts. Contextual actions must capture their target so asynchronous search cannot redirect an open action menu.
+
+Visual harnesses must change palettes through the same Settings action as the app and verify that the stored model and rendered palette agree. Directly resetting the global palette can leave detached Settings pages in the previous theme.

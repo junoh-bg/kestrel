@@ -167,7 +167,9 @@ enum KestrelTheme: String, CaseIterable {
       window.appearance = NSAppearance(named: appearance)
     }
     window.isOpaque = false
-    window.backgroundColor = .clear
+    // Standard title bars sit outside our material view. Give them a backing
+    // color so their title and controls never draw directly over the wallpaper.
+    window.backgroundColor = window.styleMask.contains(.fullSizeContentView) ? .clear : background
     guard let content = window.contentView else { return }
     content.wantsLayer = true
     content.layer?.backgroundColor = NSColor.clear.cgColor
@@ -278,6 +280,12 @@ enum KestrelTheme: String, CaseIterable {
   required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
   var titleColor: NSColor { KestrelBrand.text }
   var usesPaletteBackground: Bool { true }
+  override var intrinsicContentSize: NSSize {
+    guard usesPaletteBackground else { return super.intrinsicContentSize }
+    let text = attributedTitle.size()
+    // Borderless native cells otherwise collapse to the text bounds.
+    return NSSize(width: max(64, ceil(text.width) + 24), height: max(28, ceil(text.height) + 10))
+  }
   func updateTheme() {
     if usesPaletteBackground {
       bezelStyle = .recessed
@@ -296,6 +304,7 @@ enum KestrelTheme: String, CaseIterable {
         .font: font ?? NSFont.systemFont(ofSize: NSFont.systemFontSize),
       ])
     attributedAlternateTitle = attributedTitle
+    invalidateIntrinsicContentSize()
   }
 }
 
