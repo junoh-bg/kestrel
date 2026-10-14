@@ -4,13 +4,13 @@
 
 **Make everyday work immediate, predictable, and personal.**
 
-A native Mac launcher for opening apps, finding files, searching Google, calculating, and reusing copied text and saved snippets—all from **Option–Space**. Five themes. Local storage. No account required.
+A native Mac launcher for opening apps, finding files and folders, searching Google, calculating, and reusing copied text and saved snippets—all from **Option–Space**. Five themes. Local storage. No account required.
 
 **macOS 14+ · Apple silicon · Free and open source**
 
 ![Kestrel demo](docs/demo/kestrel-demo.gif)
 
-[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · Native app UI with sample data.
+[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · English walkthrough of search and theme customization, using sample data.
 
 ## Install
 
