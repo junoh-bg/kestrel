@@ -23,6 +23,8 @@ Verification on the development Mac:
 - Reviewed native Settings renders in all five themes, including light/dark transitions through the real Settings controls. Captures use isolated sample state.
 - An isolated app using the production update service installed a signed build 2 over build 1 and relaunched. Manual checking then reported the newest version correctly.
 - A signed feed pointing to a one-byte-modified ZIP produced Sparkle's “improperly signed” error and retained build 2. Public-key-only verification independently accepted the original archive and rejected the altered one.
-- The release ZIP preparation path completed locally. Full signed-feed generation remains pending the separate macOS Keychain approval for `generate_appcast`.
+- The release ZIP preparation and signed-feed generation completed locally after Keychain approval. The generated feed correctly identifies the app version/build, macOS 14 minimum, Apple silicon requirement, and versioned asset URL; signature verification passed. This test feed was not published.
 
 No release has been published by this change. The installed v1.5.0 app still needs one manual upgrade after the updater release is approved. Separate-Mac download/Gatekeeper validation and macOS 14 coverage remain release checks; updater signing does not provide Apple notarization.
+
+The refreshed English demo covers apps, folders, files, calculator, Google search, clipboard history, snippets, five themes, and update controls. The updater segment is explicitly labeled “Coming next” until release. Native views use isolated sample data and the opaque accessibility fallback.

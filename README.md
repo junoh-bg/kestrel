@@ -70,7 +70,7 @@ The current v1.5.0 download predates this feature. To upgrade it, quit Kestrel, 
 
 ![Kestrel demo](docs/demo/kestrel-demo.gif)
 
-[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · v1.5 walkthrough of search and theme customization using sample data. Background blur varies with your desktop and accessibility settings.
+[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · 43-second English walkthrough of search, daily tools, themes, and upcoming in-app updates using sample data. Background blur varies with your desktop and accessibility settings.
 
 ## Use
 

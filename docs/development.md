@@ -26,6 +26,8 @@ git diff --check
 
 Native tests require a logged-in Mac and Spotlight indexing. Run them serially: AppKit shares process state and some search tests have fixed timing assumptions. Smoke mode uses temporary data and ignores saved user data. Check live theme transitions as well as automated tests when changing native controls.
 
+For demo exports, normalize native PNG captures to a single pixel format before concatenating them. AppKit may produce mixed 8-bit and 16-bit frames; video filter reinitialization can otherwise alter timing and skip visible scenes. Check the encoded video, not only its source frames.
+
 ## Structure
 
 - `Sources/Kestrel/`: native app, launcher, settings, and macOS adapters.
