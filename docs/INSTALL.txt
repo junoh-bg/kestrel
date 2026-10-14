@@ -8,7 +8,8 @@ Requires macOS 14 or later and an Apple silicon (M-series) Mac.
 
 Type an app or folder name, a calculation such as = 12 * 8,
 clip to recall copied text, or snip to find saved snippets.
-Arrow keys select, Return opens or copies, Escape hides the launcher.
+Arrow keys select, Return opens or copies, Escape or Command-W hides the launcher.
+Command-K shows actions for the selected result.
 Use the wing menu to open Settings or quit Kestrel.
 
 Clipboard history starts off. Enable it only if you want copied text

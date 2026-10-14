@@ -2,7 +2,7 @@
 
 User-facing changes are recorded here. Release versions follow `MAJOR.MINOR.PATCH`.
 
-## [Unreleased]
+## [1.5.0] — 2026-10-14 · Design and actions preview
 
 - Refreshed all five themes: Nightflight, Moss, Dusk, Linen, and Frost. Search and Settings share a soft glass surface, with an opaque fallback when Reduce Transparency is enabled.
 - Made the launcher compact when idle and sized results to their content, up to seven visible rows.
@@ -10,7 +10,9 @@ User-facing changes are recorded here. Release versions follow `MAJOR.MINOR.PATC
 - Added comfortable padding to Settings action buttons and a solid backing for the native title bar.
 - Fixed selected folder icon contrast in light themes and launcher shortcuts with Korean input enabled.
 
-- Added an English product demo covering app, folder and file search, daily tools, and theme customization, with a GIF in the README and an MP4 for sharing.
+- Updated the English product demo for the new design, covering app, folder and file search, daily tools, and theme customization, with a GIF in the README and an MP4 for sharing.
+
+[Release notes](docs/releases/1.5.0.md)
 
 ## [1.4.2] — 2026-10-14 · Open-source preview
 

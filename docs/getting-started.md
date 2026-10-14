@@ -4,7 +4,7 @@ Kestrel is a menu-bar launcher for Apple silicon Macs running macOS 14 or later.
 
 ## Install
 
-1. Download [Kestrel 1.4.2 for Mac (.zip)](https://github.com/junoh-bg/kestrel/releases/download/v1.4.2/Kestrel-1.4.2-macos-arm64.zip). This is the ready-to-use app, not GitHub’s source-code ZIP. [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.4.2) and a [checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.4.2/Kestrel-1.4.2-macos-arm64.zip.sha256) are available separately.
+1. Download [Kestrel 1.5.0 for Mac (.zip)](https://github.com/junoh-bg/kestrel/releases/download/v1.5.0/Kestrel-1.5.0-macos-arm64.zip). This is the ready-to-use app, not GitHub’s source-code ZIP. [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.5.0) and a [checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.5.0/Kestrel-1.5.0-macos-arm64.zip.sha256) are available separately.
 2. Unzip the archive. Move **Kestrel.app** into **Applications** using Finder.
 3. Open Kestrel from Applications. Use **Option–Space** or the **wing icon** in the menu bar to bring it back.
 
