@@ -17,3 +17,6 @@ __pycache__/
 *.dSYM/
 state.json
 search-folders.json
+
+# Private reference material and history backups
+private-research/
