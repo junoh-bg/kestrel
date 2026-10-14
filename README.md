@@ -10,7 +10,9 @@ A native Mac launcher for opening apps, finding files, searching Google, calcula
 
 ## Install
 
-[**Download Kestrel for Mac**](https://github.com/junoh-bg/kestrel/releases)
+[**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.4.2/Kestrel-1.4.2-macos-arm64.zip)
+
+v1.4.2 preview · [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.4.2) · [SHA-256 checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.4.2/Kestrel-1.4.2-macos-arm64.zip.sha256)
 
 Unzip the download, drag **Kestrel.app** into **Applications**, and open it. Press **Option–Space** to start. If another launcher uses that shortcut, quit it or change its shortcut.
 

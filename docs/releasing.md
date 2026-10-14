@@ -10,7 +10,7 @@
 
 Increment `build` for every distributed app build. Never reuse a published version/tag or replace its assets; issue a new patch version instead. Tag releases `vMAJOR.MINOR.PATCH`. Mark preview releases as prereleases in GitHub; they are not the default “latest” release. Version 1.4.2 is the first open-source preview; the earlier numbers preserve upgrade ordering for existing users.
 
-Before a release, update `version.json`, the matching `CHANGELOG.md` section, and `docs/releases/<version>.md` together. Date the changelog entry when the release is actually published. The packager verifies bundle versions against the version file and includes the MIT license in the app.
+Before a release, update `version.json`, the matching `CHANGELOG.md` section, and `docs/releases/<version>.md` together. Update the versioned ZIP, checksum, and release links in the README and getting-started guide; the primary download button must point to the app asset, not the release listing. Avoid `/releases/latest` for previews because prereleases are excluded. Date the changelog entry when the release is actually published. The packager verifies bundle versions against the version file and includes the MIT license in the app.
 
 ## Build a release archive
 
