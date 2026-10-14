@@ -171,7 +171,7 @@ enum KestrelTheme: String, CaseIterable {
     guard let content = window.contentView else { return }
     content.wantsLayer = true
     content.layer?.backgroundColor = NSColor.clear.cgColor
-    content.layer?.cornerRadius = 18
+    content.layer?.cornerRadius = window.styleMask.contains(.fullSizeContentView) ? 18 : 0
     content.layer?.masksToBounds = true
     if let material = content.subviews.compactMap({ $0 as? KestrelMaterialSurface }).first {
       material.updateTheme()

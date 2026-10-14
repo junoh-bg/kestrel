@@ -89,6 +89,10 @@ import Testing
       let content = try #require(window.contentView)
       let material = try #require(descendant(of: NSVisualEffectView.self, in: content).first)
       #expect(material.blendingMode == .behindWindow)
+      // A conventional title bar sits outside the content material and needs its own background.
+      if !window.styleMask.contains(.fullSizeContentView) {
+        #expect(!window.titlebarAppearsTransparent)
+      }
       #expect(window.appearance?.name == (theme.isDark ? .darkAqua : .aqua))
     }
   }

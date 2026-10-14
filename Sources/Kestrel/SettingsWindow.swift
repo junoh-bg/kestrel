@@ -49,7 +49,7 @@ final class SettingsWindow: NSObject, NSTableViewDataSource, NSTableViewDelegate
     self.model = model
     super.init()
     window.delegate = self
-    window.titlebarAppearsTransparent = true
+    window.titlebarAppearsTransparent = false
     window.title = "Kestrel Settings"
     window.isReleasedWhenClosed = false
     KestrelBrand.apply(to: window)

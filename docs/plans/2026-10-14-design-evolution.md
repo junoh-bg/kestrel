@@ -43,12 +43,12 @@ The first pass is implemented on `feat/smoked-glass-design`. All five palette fa
 
 These are captures of the native views with the opaque accessibility fallback enabled, so palette comparison does not depend on desktop wallpaper. The translucent surface was separately inspected in the running preview.
 
-Review found and fixed low-contrast selected folder icons in light themes, stale actions after deselection, and Command shortcuts receiving Hangul characters when Korean input is active. Menu actions capture their result and query so asynchronous search updates cannot retarget an already-open menu.
+Review found and fixed low-contrast selected folder icons in light themes, stale actions after deselection, Command shortcuts receiving Hangul characters when Korean input is active, and a transparent Settings title bar outside the content material. Menu actions capture their result and query so asynchronous search updates cannot retarget an already-open menu.
 
 Verification on the development Mac:
 
 - 71 Swift tests passed (12 core, 59 native), including asynchronous search selection, isolated clipboard actions, all-palette contrast and controls, opaque fallback, and Korean-input shortcuts.
 - Three packaging tests passed; release build, app packaging, signature verification, packaged smoke test, strict Swift formatting lint, and `git diff --check` passed.
-- Native launcher and minimum-width Settings captures inspected for all five palettes. Live checks confirmed the glass surface, arrow-key selection, click-open actions, and Command–K with Korean input. Native automation subsequently timed out, so final live Command–W and Settings-click checks were not completed; their native regression tests passed.
+- Native launcher and minimum-width Settings captures inspected for all five palettes. Live checks confirmed the glass surface, arrow-key selection, click-open actions, Command–K with Korean input, Settings navigation, and Linen → Frost → Nightflight transitions. The Mac subsequently locked, so the final live Command–W and corrected title-bar checks remain pending; their native regression tests passed.
 
 This branch is a design review candidate. It has not replaced the installed app or published a new release. The existing downloadable preview and its demo remain unchanged. Before distributing this design, assign a new minor version/build, prepare its release notes and updated demo, and validate the packaged app on the supported macOS versions. No proprietary reference code or assets are included.
