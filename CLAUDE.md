@@ -1,6 +1,6 @@
 # Kestrel
 
-Native macOS 14+ launcher using Swift and AppKit. No third-party runtime dependencies.
+Native macOS 14+ launcher using Swift and AppKit. Sparkle is the sole third-party runtime dependency, pinned in Package.swift and Package.resolved for authenticated updates.
 
 Keep the legacy `com.localpilot.launcher` bundle identifier, `Application Support/LocalPilot` data directory, and `LOCALPILOT_DATA_DIR` developer override stable for upgrades. Never package user clipboard history, snippets, credentials, or private research.
 
@@ -17,3 +17,5 @@ All palettes share the same layout, interaction model, and material treatment. P
 Launcher Command shortcuts must work with non-Latin input methods as well as Latin layouts. Contextual actions must capture their target so asynchronous search cannot redirect an open action menu.
 
 Visual harnesses must change palettes through the same Settings action as the app and verify that the stored model and rendered palette agree. Directly resetting the global palette can leave detached Settings pages in the previous theme.
+
+Updater checks are user-controlled and installation always requires consent. Never enable unattended installs or system-profile reporting. Keep feed and archive signatures required, verify archives before extraction, and preserve Sparkle framework symlinks and nested signatures. Signing keys stay in Keychain; publish the tested asset before its signed feed, following docs/releasing.md.

@@ -156,12 +156,19 @@ import KestrelCore
   private var storageBlocked = false
   private var timer: Timer?
   private let pasteboard: NSPasteboard
+  private let frontmostApplicationID: () -> String?
   private var lastChange: Int
   private var lastExpiryCheck = Date.distantPast
   private var lastSaveAttempt = Date.distantPast
   private var pendingHistory = [ClipboardItem]()
-  init(directory: URL, pasteboard: NSPasteboard = .general) throws {
+  init(
+    directory: URL, pasteboard: NSPasteboard = .general,
+    frontmostApplicationID: @escaping () -> String? = {
+      NSWorkspace.shared.frontmostApplication?.bundleIdentifier
+    }
+  ) throws {
     self.pasteboard = pasteboard
+    self.frontmostApplicationID = frontmostApplicationID
     store = try StateStore(directory: directory)
     do { state = try store.load() } catch {
       state = StoredState()
@@ -195,7 +202,7 @@ import KestrelCore
       forType: NSPasteboard.PasteboardType("org.nspasteboard.source"))
     guard CapturePolicy.allows(types: types, source: declaredSource, enabled: captureEnabled),
       CapturePolicy.allows(
-        types: types, source: NSWorkspace.shared.frontmostApplication?.bundleIdentifier,
+        types: types, source: frontmostApplicationID(),
         enabled: captureEnabled),
       let text = board.string(forType: .string)
     else { return }

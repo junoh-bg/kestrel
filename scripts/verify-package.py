@@ -6,7 +6,7 @@ import struct
 import sys
 from pathlib import Path
 
-from release_metadata import load_metadata
+from release_metadata import load_metadata, UPDATE_POLICY
 
 app = Path(sys.argv[1])
 info = plistlib.loads((app / "Contents/Info.plist").read_bytes())
@@ -15,6 +15,14 @@ binary = (app / "Contents/MacOS/Kestrel").read_bytes()
 source_root = str(Path(__file__).resolve().parents[1]).encode()
 if source_root in binary:
     errors.append("Executable contains build-machine source paths; strip debug symbols before signing")
+for key, expected in UPDATE_POLICY.items():
+    if info.get(key) != expected:
+        errors.append(f"Updater policy mismatch: {key}")
+framework = app / "Contents/Frameworks/Sparkle.framework"
+if not (framework / "Sparkle").is_file() or not (framework / "Versions/Current").is_symlink():
+    errors.append("Sparkle framework is missing or its symlinks were not preserved")
+if not (app / "Contents/Resources/Sparkle-LICENSE").is_file():
+    errors.append("Missing Sparkle license")
 metadata = load_metadata()
 if info.get("CFBundleShortVersionString") != metadata["version"]:
     errors.append("App version does not match version.json")

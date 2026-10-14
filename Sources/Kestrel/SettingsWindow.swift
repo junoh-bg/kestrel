@@ -18,6 +18,11 @@ final class SettingsWindow: NSObject, NSTableViewDataSource, NSTableViewDelegate
   let titleField = NSTextField()
   let keywordField = NSTextField()
   let bodyField = NSTextView()
+  var checkForUpdates: (() -> Void)?
+  var automaticUpdateChecksChanged: ((Bool) -> Void)?
+  let automaticUpdateChecks = KestrelCheckbox(
+    checkboxWithTitle: "Check automatically", target: nil, action: nil)
+  private var updateButton: KestrelActionButton?
   var openQuery: ((String) -> Void)?
   var chooseSearchFolder: (() -> Void)?
   var openFullDiskAccess: (() -> Void)?
@@ -230,6 +235,13 @@ final class SettingsWindow: NSObject, NSTableViewDataSource, NSTableViewDelegate
     let version =
       Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
       ?? "Development build"
+    let updateButton = button("Check for Updates…", #selector(checkUpdates))
+    updateButton.isEnabled = false
+    self.updateButton = updateButton
+    automaticUpdateChecks.target = self
+    automaticUpdateChecks.action = #selector(changeAutomaticUpdateChecks)
+    automaticUpdateChecks.isEnabled = false
+    automaticUpdateChecks.updateTheme()
     pages[.general] = page(
       "General", subtitle: "Your everyday launcher, close at hand.",
       views: [
@@ -242,6 +254,17 @@ final class SettingsWindow: NSObject, NSTableViewDataSource, NSTableViewDelegate
             row(
               "Close the launcher", detail: "Kestrel keeps running in the menu bar.",
               control: label("Esc  or  ⌘ W", size: 14, weight: .medium)),
+          ]),
+        group(
+          "Updates",
+          rows: [
+            row(
+              "Software updates", detail: "See what's new and choose when to install.",
+              control: updateButton),
+            row(
+              "Automatic checks",
+              detail: "Look for new versions in the background. Ask before installing.",
+              control: automaticUpdateChecks),
           ]),
         group(
           "Storage",
@@ -441,6 +464,16 @@ final class SettingsWindow: NSObject, NSTableViewDataSource, NSTableViewDelegate
     }
     pageScroll.contentView.scroll(to: .zero)
     pageScroll.reflectScrolledClipView(pageScroll.contentView)
+  }
+  func configureUpdates(available: Bool, automaticallyChecks: Bool) {
+    updateButton?.isEnabled = available
+    automaticUpdateChecks.isEnabled = true
+    automaticUpdateChecks.state = automaticallyChecks ? .on : .off
+    automaticUpdateChecks.updateTheme()
+  }
+  @objc private func checkUpdates() { checkForUpdates?() }
+  @objc private func changeAutomaticUpdateChecks() {
+    automaticUpdateChecksChanged?(automaticUpdateChecks.state == .on)
   }
   func show() {
     refresh()

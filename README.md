@@ -60,6 +60,12 @@ cd kestrel
 
 The script creates `dist/Kestrel.app`; it does not install it. Quit Kestrel, move the built app into **Applications**, replace the previous app if present, and open it. Saved data is kept separately. A local build does not notarize the published ZIP.
 
+### Updating
+
+If your wing menu has **Check for Updates…**, use it to download and install a newer version. Automatic checks can be turned off in **Settings → General**; installation always asks first.
+
+The current v1.5.0 download predates this feature. To upgrade it, quit Kestrel, replace the app in Applications with the newer download, and reopen it. Your saved settings and snippets remain intact.
+
 ## Demo
 
 ![Kestrel demo](docs/demo/kestrel-demo.gif)
@@ -70,6 +76,6 @@ The script creates `dist/Kestrel.app`; it does not install it. Quit Kestrel, mov
 
 Type an app or folder name, `file report`, a Google query, `= 12 * 8`, `clip meeting`, or `snip signature`. Use **↑ / ↓** to select, **Return** to open or copy, and **Esc / ⌘ W** to dismiss. **⌘ K** opens actions for the selected result, such as Show in Finder or Copy Path.
 
-Open **Settings** from the wing menu to choose a theme, manage snippets, or enable optional clipboard history. File search uses Spotlight and may need folder access. Clipboard history starts off and stores unencrypted text locally when enabled. Selecting Google search sends that query to your browser; Kestrel has no telemetry or cloud sync.
+Open **Settings** from the wing menu to choose a theme, manage snippets, or enable optional clipboard history. File search uses Spotlight and may need folder access. Clipboard history starts off and stores unencrypted text locally when enabled. Selecting Google search sends that query to your browser; Kestrel has no telemetry or cloud sync. Update checks contact GitHub for release information.
 
 [Setup & help](docs/getting-started.md) · [Release notes](CHANGELOG.md) · [Report an issue](https://github.com/junoh-bg/kestrel/issues) · [MIT license](LICENSE)

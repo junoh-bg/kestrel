@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Apple silicon, macOS 14+, Xcode 16+ or compatible Command Line Tools with Swift 6+, and Python 3. Builds use AppKit and Foundation with no third-party runtime dependencies.
+Apple silicon, macOS 14+, Xcode 16+ or compatible Command Line Tools with Swift 6+, and Python 3. Builds use AppKit and Foundation, plus pinned Sparkle 2.10.0 for signed updates. The first build downloads this dependency. No signing key is needed to build or use Kestrel; only maintainers publishing updates need the private Keychain key.
 
 ```sh
 git clone https://github.com/junoh-bg/kestrel.git
