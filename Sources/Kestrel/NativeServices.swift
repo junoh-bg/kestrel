@@ -3,11 +3,46 @@ import KestrelCore
 
 @MainActor final class AppCatalog {
   private(set) var candidates: [LaunchCandidate] = []
+  var changed: (() -> Void)?
+  private let roots: [String]
+  private var refreshing = false
+  private var revision = 0
+
+  init(roots: [String]? = nil) {
+    self.roots =
+      roots ?? [
+        "/Applications", "/System/Applications", "/System/Library/CoreServices/Applications",
+        NSHomeDirectory() + "/Applications",
+      ]
+  }
+
   func refresh() {
-    let roots = [
-      "/Applications", "/System/Applications", "/System/Library/CoreServices/Applications",
-      NSHomeDirectory() + "/Applications",
-    ]
+    revision += 1
+    apply(Self.scan(roots: roots))
+  }
+
+  func refreshInBackground() {
+    guard !refreshing else { return }
+    refreshing = true
+    let revision = revision
+    let roots = roots
+    Task { [weak self] in
+      let candidates = await Task.detached(priority: .utility) { Self.scan(roots: roots) }.value
+      guard let self else { return }
+      self.refreshing = false
+      // A manual refresh may have completed while the background scan was running.
+      guard self.revision == revision else { return }
+      self.apply(candidates)
+    }
+  }
+
+  private func apply(_ updated: [LaunchCandidate]) {
+    guard candidates != updated else { return }
+    candidates = updated
+    changed?()
+  }
+
+  nonisolated private static func scan(roots: [String]) -> [LaunchCandidate] {
     var found = [String: LaunchCandidate]()
     for root in roots {
       guard
@@ -28,7 +63,7 @@ import KestrelCore
         }
       }
     }
-    candidates = found.values.sorted {
+    return found.values.sorted {
       $0.title.localizedStandardCompare($1.title) == .orderedAscending
     }
   }
