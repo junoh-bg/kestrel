@@ -6,7 +6,7 @@ For Claude Code, Codex, or another coding agent running on the user's Mac. This 
 
 - Confirm macOS 14 or later and Apple silicon (`sw_vers -productVersion` and `system_profiler SPHardwareDataType`). An Intel Mac is not supported by the published app.
 - Look for an existing Kestrel in `/Applications` and `~/Applications`. If installed, report its version and avoid creating a second copy. Do not read clipboard history or snippet contents.
-- Explain that the preview is ad-hoc signed and not Apple-notarized. No Apple Developer account is needed to download or build it.
+- Explain that the published preview uses a persistent self-signed identity and is not Apple-notarized. No Apple Developer account is needed to download or build it.
 
 ## 2. Obtain the app
 
@@ -31,6 +31,6 @@ Replace `<version>` with the selected release's exact version. Stop on a mismatc
 
 Check the installed version and ask the user to try Option–Space, opening an app, a calculation, and Esc/Command–W. If another launcher owns Option–Space, explain the conflict; do not quit or reconfigure it without the user's agreement. The wing menu can also open Kestrel.
 
-Clipboard history remains off on a fresh install unless the user opts in; preserve existing preferences on upgrades. Folder access, Full Disk Access, and starting at login are optional. Explain the relevant settings when requested rather than granting broad access automatically.
+Clipboard history remains off on a fresh install unless the user opts in; preserve existing preferences on upgrades. For an upgrade from 1.6.1 or earlier, explain the [one-time Full Disk Access refresh](getting-started.md#one-time-permission-refresh-for-170) if the user previously enabled it and protected-folder access stops working. Leave macOS authentication to the user. Folder access, Full Disk Access, and starting at login are optional. Explain the relevant settings when requested rather than granting broad access automatically.
 
 Report the installed path, version, installation method, checks actually completed, and any remaining manual approval. Never report a successful launch solely because the download or build succeeded.

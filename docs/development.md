@@ -40,3 +40,5 @@ For demo exports, normalize native PNG captures to a single pixel format before 
 Keep the existing bundle identifier and data-directory name stable for upgrades. Never include application-support data in a release. Clipboard capture stays off by default. Search input must not become shell commands.
 
 Use conventional commits and focused pull requests. Include the user-visible change, verification, and screenshots for interface changes. See [release maintenance](releasing.md) for versioning and distribution.
+
+[How Kestrel works, including signing and updates](how-kestrel-works.md).
