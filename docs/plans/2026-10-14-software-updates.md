@@ -12,7 +12,7 @@ Test settings callbacks and availability, packaging identity and signing metadat
 
 ## Review and verification
 
-Implemented with automatic checks enabled by default and explicit user installation. The private Ed25519 key was created with user approval in Keychain; only its public key is committed. Both feed and archive signatures are required. The committed feed is empty and signed until a tested release is approved for publication.
+Implemented with automatic checks enabled by default and explicit user installation. The private Ed25519 key was created with user approval in Keychain; only its public key is committed. Both feed and archive signatures are required. The initial feed was empty and signed until the first tested release was approved for publication.
 
 Review covered updater lifetime, menu availability, stored preferences, shutdown/draft handling, framework embedding, key isolation, release identity validation, and documentation. Two findings were corrected: release preparation now rejects a mismatched Keychain public key, and manual checks dismiss the floating launcher so it cannot cover the update dialog. A clipboard test exposed dependence on the frontmost application while macOS displayed a security prompt; the test now injects that input, with a separate regression proving security prompts still block capture.
 
@@ -30,3 +30,5 @@ Version 1.6.0 (build 11) is the first updater-enabled release. The installed v1.
 The refreshed English demo covers apps, folders, files, calculator, Google search, clipboard history, snippets, five themes, and update controls. The release demo shows the available update controls. Native views use isolated sample data and the opaque accessibility fallback.
 
 Final 1.6.0 release checks on 2026-10-15 passed: 75 serial Swift tests, eight packaging tests, release build/package, nested signatures, isolated packaged startup, strict formatting, and diff checks. The 43-second H.264 MP4 was re-rendered with shipped-feature wording, decoded fully, and visually checked. No new blocking findings were identified in the final updater/release review.
+
+Release publication: v1.6.0 build 11 was built from commit `7b8cfc7bdaed984c04c9054a262107b3086ad373` and published as a preview. The anonymous ZIP download matched the locally tested archive (SHA-256 `e7ab8ea74c30b2194ec7bd26be0b94f9a364b2b55d53cd9e5ac222784c3dc4cb`). Only then was the signed feed prepared for publication on main.
