@@ -9,6 +9,44 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
         <description>Signed Kestrel preview updates for Apple silicon.</description>
         <language>en</language>
         <item>
+            <title>1.7.0</title>
+            <pubDate>Thu, 15 Oct 2026 14:47:48 +0900</pubDate>
+            <link>https://github.com/junoh-bg/kestrel</link>
+            <sparkle:version>13</sparkle:version>
+            <sparkle:shortVersionString>1.7.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description><![CDATA[<pre># Kestrel 1.7.0 — Nested search and lasting permissions
+
+Find files and folders using paths such as `dev/docs`, `kestrel/docs/demo`, or a partial final name like `dev/do`. Home (`~/`) and absolute paths work too; add a trailing `/` to show only folders. Searches use Spotlight and your existing macOS permissions.
+
+Official builds now keep a consistent signing identity across updates, helping macOS retain your privacy permissions.
+
+## Existing users: one-time Full Disk Access approval
+
+**When upgrading from 1.6.1 or earlier, users who enabled Full Disk Access may need to approve Kestrel once more.** The app is moving from its old signature to a persistent identity. Your settings, snippets, and clipboard history stay in place.
+
+If protected-folder search stops working after updating:
+
+1. Open **System Settings → Privacy &amp; Security → Full Disk Access**.
+2. Remove the old **Kestrel** entry from this permission list, then use **+** to add **/Applications/Kestrel.app** and enable it. Authenticate if asked. This removes only the permission entry—not the app or your data.
+3. Choose **Quit &amp; Reopen**, then check **Kestrel Settings → Search → Check access**.
+
+Future official updates using this identity are intended to retain the approval. This was confirmed through a real Sparkle update on macOS 27.0.1; other Macs and older supported macOS versions still need verification. Locally built ad-hoc apps have a different identity and may need approval again.
+
+Full Disk Access remains optional. Apps, Google search, the calculator, and snippets work without it. You do not need to install a certificate or create any signing keys.
+
+## Update
+
+From **1.6.0 or later**, choose **Check for Updates…** in the wing menu or General settings. Automatic checks notify you; you choose when to install. **1.5.0 and earlier** need one manual replacement using the app ZIP.
+
+## Compatibility
+
+Apple silicon · macOS 14+ · build 13 · preview. Self-signed and **not Apple-notarized**; the initial macOS installation warning remains. Follow the [first-launch guide](https://github.com/junoh-bg/kestrel/blob/main/docs/getting-started.md#first-launch) for a trusted download. Separate-Mac and macOS 14 acceptance remain unverified.
+</pre>]]></description>
+            <enclosure url="https://github.com/junoh-bg/kestrel/releases/download/v1.7.0/Kestrel-1.7.0-macos-arm64.zip" length="1410073" type="application/octet-stream" sparkle:edSignature="0SJo2zGm/1SRP7Dy62WBIFvABoJobDDWgvBeMeX2eL4ka71+uHVoQV2XxSEqQZZhj6xcMq+vaabnjmjAw/E1Aw=="/>
+        </item>
+        <item>
             <title>1.6.1</title>
             <pubDate>Thu, 15 Oct 2026 11:23:35 +0900</pubDate>
             <link>https://github.com/junoh-bg/kestrel</link>
@@ -65,6 +103,6 @@ Download `Kestrel-1.6.0-macos-arm64.zip`, unzip it, and move Kestrel.app into Ap
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: +R9y3lH9m+BWHiie9BGouiX7R3DPjPfnOY8yKgyksyNFAmTNpBDhGW8eCi3JEcCdmZEqsMiiQ5QbCH5TFafsAA==
-length: 4861
+edSignature: 9deDgOMcpSHyUepTv3HxeYGwKqUC1UFWcCTbtf3PXrXeagCvou6pCEQlZ2WSEIVJmMhdrPPsAU0lVvi5YYkeDg==
+length: 7922
 -->
