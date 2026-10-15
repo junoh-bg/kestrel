@@ -1,6 +1,16 @@
 #!/bin/bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
+SIGNING_COMMAND=(python3 -B scripts/sign-app.py)
+case "${1:-}" in
+  "") ;;
+  --release-signing) SIGNING_COMMAND+=(--release) ;;
+  *) printf '%s\n' 'Usage: scripts/package.sh [--release-signing]' >&2; exit 2 ;;
+esac
+if [ "$#" -gt 1 ]; then
+  printf '%s\n' 'Usage: scripts/package.sh [--release-signing]' >&2
+  exit 2
+fi
 python3 -B scripts/release_metadata.py --field version > /dev/null
 swift build -c release
 BINARY_DIR="$(swift build -c release --show-bin-path)"
@@ -24,6 +34,5 @@ ditto "$SPARKLE/Sparkle.xcframework/macos-arm64_x86_64/Sparkle.framework" "$APP_
 cp "$SPARKLE/LICENSE" "$APP_OUTPUT/Contents/Resources/Sparkle-LICENSE"
 codesign --verify --deep --strict "$APP_OUTPUT/Contents/Frameworks/Sparkle.framework"
 python3 -B scripts/verify-package.py "$APP_OUTPUT"
-codesign --force --sign - "$APP_OUTPUT"
-codesign --verify --deep --strict "$APP_OUTPUT"
+"${SIGNING_COMMAND[@]}" "$APP_OUTPUT"
 printf '%s\n' "$APP_OUTPUT"

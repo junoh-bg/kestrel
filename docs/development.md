@@ -10,7 +10,7 @@ cd kestrel
 scripts/package.sh
 ```
 
-Move `dist/Kestrel.app` to Applications and open it. Quit an existing Kestrel before replacing it. Local builds use an ad-hoc signature. Earlier build outputs are retained under ignored `dist/archive/`.
+Move `dist/Kestrel.app` to Applications and open it. Quit an existing Kestrel before replacing it. Local builds use an ad-hoc signature. Maintainer release builds use `scripts/package.sh --release-signing` with the pinned certificate in Keychain; see [release maintenance](releasing.md). Replacing an installed release with an ad-hoc source build can require privacy permission approval again. Earlier build outputs are retained under ignored `dist/archive/`.
 
 ## Verify changes
 

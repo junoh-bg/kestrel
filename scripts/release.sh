@@ -4,7 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 python3 -B -m unittest discover -s Tests/Packaging -v
 VERSION="$(python3 -B scripts/release_metadata.py --field version)"
-scripts/package.sh
+scripts/package.sh --release-signing
 if [ "$(lipo -archs dist/Kestrel.app/Contents/MacOS/Kestrel)" != arm64 ]; then
   printf '%s\n' 'The current download supports Apple silicon only.' >&2
   exit 1
