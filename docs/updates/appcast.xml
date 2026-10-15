@@ -9,6 +9,30 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
         <description>Signed Kestrel preview updates for Apple silicon.</description>
         <language>en</language>
         <item>
+            <title>1.6.1</title>
+            <pubDate>Thu, 15 Oct 2026 11:23:35 +0900</pubDate>
+            <link>https://github.com/junoh-bg/kestrel</link>
+            <sparkle:version>12</sparkle:version>
+            <sparkle:shortVersionString>1.6.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description><![CDATA[<pre># Kestrel 1.6.1 — Settings readability fix
+
+Fixed hard-to-read checkbox labels in **Settings → General** and **Settings → Clipboard**, including “Check automatically.” Labels now use the selected theme&#x27;s text color consistently.
+
+All five Settings sections were reviewed across all five themes. Added pixel-level checks for checked, unchecked, and disabled checkbox labels under both legacy and current macOS rendering paths.
+
+## Update
+
+From Kestrel 1.6.0, choose **Check for Updates…** in the wing menu or General settings, then approve installation. Version 1.5.0 and earlier need one manual app replacement. Saved settings and snippets remain in place.
+
+## Compatibility
+
+Apple silicon, macOS 14+, build 12. This preview remains ad-hoc signed and **not Apple-notarized**. Follow the [first-launch guide](https://github.com/junoh-bg/kestrel/blob/main/docs/getting-started.md#first-launch) if macOS blocks a trusted download. Separate-Mac and macOS 14 acceptance remain unverified.
+</pre>]]></description>
+            <enclosure url="https://github.com/junoh-bg/kestrel/releases/download/v1.6.1/Kestrel-1.6.1-macos-arm64.zip" length="1392712" type="application/octet-stream" sparkle:edSignature="Cd9KEtEqhC5l4195wbN34zWdkrANH26t775aici4h6flCwON7063+vV/+2YmPTUzl7X8QCukBW7nnx8zho1uDw=="/>
+        </item>
+        <item>
             <title>1.6.0</title>
             <pubDate>Thu, 15 Oct 2026 10:49:23 +0900</pubDate>
             <link>https://github.com/junoh-bg/kestrel</link>
@@ -41,6 +65,6 @@ Download `Kestrel-1.6.0-macos-arm64.zip`, unzip it, and move Kestrel.app into Ap
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: HIXEifkWGdl3CGhz5hOEoff3+3WafT3V01gxQcK8CYEHk0P4DeDa1Ea8VbIWql2I7+4e2sYZm3xodCAy9vQFBw==
-length: 3045
+edSignature: +R9y3lH9m+BWHiie9BGouiX7R3DPjPfnOY8yKgyksyNFAmTNpBDhGW8eCi3JEcCdmZEqsMiiQ5QbCH5TFafsAA==
+length: 4861
 -->
