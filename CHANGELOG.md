@@ -2,7 +2,7 @@
 
 User-facing changes are recorded here. Release versions follow `MAJOR.MINOR.PATCH`.
 
-## [1.7.1] — Unreleased · Newly installed apps
+## [1.7.1] — 2026-10-15 · Newly installed apps
 
 - Refreshes the application list in the background when the launcher opens and every five seconds while it remains visible.
 - Newly installed, renamed, and removed apps update automatically, including apps inside Applications subfolders. Manual refresh remains available.

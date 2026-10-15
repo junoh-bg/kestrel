@@ -20,6 +20,10 @@ download, use System Settings > Privacy & Security > Open Anyway if
 available. Managed Macs may not allow this; follow your organization's
 policy. Do not disable Gatekeeper or remove quarantine attributes to install it.
 
+If macOS blocks opening the app again after an update, the same per-app
+approval may be needed. Open Anyway is separate from Full Disk Access;
+persistent signing does not provide Apple notarization.
+
 Setup: https://github.com/junoh-bg/kestrel/blob/main/docs/getting-started.md
 Updates: https://github.com/junoh-bg/kestrel/releases
 
