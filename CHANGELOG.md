@@ -2,6 +2,16 @@
 
 User-facing changes are recorded here. Release versions follow `MAJOR.MINOR.PATCH`.
 
+## [1.6.0] — 2026-10-15 · Software updates preview
+
+- Refreshed the English demo with clipboard history, all five themes, and in-app updates.
+
+- Added **Check for Updates…** to the wing menu, app menu, and General settings.
+- Added automatic update checks with an option to turn them off. Users choose when to download and install; Kestrel never installs silently.
+- Added signed release feeds and verified downloads through Sparkle. Existing v1.5.0 installations need one manual update to receive this feature.
+
+[Release notes](docs/releases/1.6.0.md)
+
 ## [1.5.0] — 2026-10-14 · Design and actions preview
 
 - Refreshed all five themes: Nightflight, Moss, Dusk, Linen, and Frost. Search and Settings share a soft glass surface, with an opaque fallback when Reduce Transparency is enabled.

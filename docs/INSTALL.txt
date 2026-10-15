@@ -23,5 +23,7 @@ policy. Do not disable Gatekeeper or remove quarantine attributes to install it.
 Setup: https://github.com/junoh-bg/kestrel/blob/main/docs/getting-started.md
 Updates: https://github.com/junoh-bg/kestrel/releases
 
-To update, quit Kestrel, replace the app in Applications, and reopen it.
+Use Check for Updates in the wing menu to install future versions. Automatic
+checks can be disabled in Settings > General; installation always asks first.
+Version 1.5.0 and earlier need one manual app replacement to get this updater.
 To uninstall, quit and move the app to Trash. Saved data is retained.

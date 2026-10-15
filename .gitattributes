@@ -1,0 +1,2 @@
+# A signed feed must retain its exact bytes on every checkout.
+docs/updates/appcast.xml -text

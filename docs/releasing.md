@@ -42,3 +42,24 @@ Source and preview app downloads are published on GitHub. Apple Developer member
 4. Check the download anonymously after publication, compare its checksum, and follow the installation guide on a separate Mac.
 
 Release notes should describe what users get, what changed, setup/upgrade requirements, and known limitations. Planned features belong outside shipped release notes.
+
+## Signed in-app updates
+
+Sparkle 2.10.0 is pinned in `Package.swift` and `Package.resolved`. `package.sh` embeds its framework, helpers, and license. `scripts/release_metadata.py` owns the public verification key, HTTPS feed URL, and consent/privacy policy. Both feed and archive signatures are required; archive verification happens before extraction. The signed empty feed is intentional until the first updater-enabled release is published.
+
+The publishing key is stored in the release maintainer's macOS Keychain under account `junoh-bg.kestrel`. Never export it into the repository or CI logs. Other contributors can build without it. Publishing requires access to this Keychain; CI does not currently publish updates. Losing the key without a rotation plan can require users to install manually again.
+
+After the normal release gates and ZIP verification, prepare the feed:
+
+```sh
+python3 -B scripts/prepare-update.py dist/releases/<output>/Kestrel-<version>-macos-arm64.zip
+```
+
+This validates the ZIP's identity, build, public key, and update policy; copies it into a new local staging directory; signs the archive with the Keychain key; and uses Sparkle's official tool to generate and verify a signed appcast. Existing feed entries are retained subject to Sparkle's version retention policy. Release notes are embedded; delta updates are disabled. Nothing is uploaded or published.
+
+1. Review the generated appcast's version, numeric build, minimum macOS version, architecture requirement, asset URL, and release notes.
+2. Publish the exact tested ZIP and checksum using the normal release steps above. Verify the asset anonymously and compare its checksum.
+3. Copy the generated `appcast.xml` **byte-for-byte** to `docs/updates/appcast.xml`, commit, review, and publish it to `main` only after the asset is available. Whitespace or newline changes invalidate its embedded signature. Re-sign if any changes are necessary.
+4. Verify the raw GitHub feed matches the local signed file. Test Check for Updates from the previous updater-enabled version, including download, explicit install consent, relaunch, and retained settings.
+
+The feed is an explicit preview channel: GitHub's prerelease flag does not prevent an entry from being offered. Never add an unapproved/draft release, unpublished URL, or reused build. Version 1.5.0 and earlier need one manual replacement to acquire the updater. Forks must use their own identity, feed, and signing key before distributing their own updates.

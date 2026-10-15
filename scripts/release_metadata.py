@@ -8,6 +8,18 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# Public verification material only. The signing secret lives in macOS Keychain.
+UPDATE_POLICY = {
+    "SUPublicEDKey": "PFTV8NVCUW0zrvvqjBXfHFKJUFNEEZLyT6kmtdwfc00=",
+    "SUFeedURL": "https://raw.githubusercontent.com/junoh-bg/kestrel/main/docs/updates/appcast.xml",
+    "SUEnableAutomaticChecks": True,
+    "SUAutomaticallyUpdate": False,
+    "SUAllowsAutomaticUpdates": False,
+    "SUSendProfileInfo": False,
+    "SUVerifyUpdateBeforeExtraction": True,
+    "SURequireSignedFeed": True,
+}
+
 
 def load_metadata(path=ROOT / "version.json"):
     value = json.loads(Path(path).read_text())
@@ -38,6 +50,7 @@ def write_info(path, metadata):
         "NSDocumentsFolderUsageDescription": "Search file names in Documents when you choose it in Kestrel.",
         "NSDownloadsFolderUsageDescription": "Search file names in Downloads when you choose it in Kestrel.",
     }
+    info.update(UPDATE_POLICY)
     Path(path).write_bytes(plistlib.dumps(info, sort_keys=False))
 
 

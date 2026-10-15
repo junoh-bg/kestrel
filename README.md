@@ -30,9 +30,9 @@ The agent can handle installation, but macOS may still require **your approval**
 
 ### Download and install yourself
 
-[**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.5.0/Kestrel-1.5.0-macos-arm64.zip)
+[**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.6.0/Kestrel-1.6.0-macos-arm64.zip)
 
-v1.5.0 preview · [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.5.0) · [SHA-256 checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.5.0/Kestrel-1.5.0-macos-arm64.zip.sha256)
+v1.6.0 preview · [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.6.0) · [SHA-256 checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.6.0/Kestrel-1.6.0-macos-arm64.zip.sha256)
 
 1. Unzip the download and drag **Kestrel.app** into **Applications**.
 2. Open Kestrel. If macOS blocks it, follow the steps below.
@@ -60,16 +60,22 @@ cd kestrel
 
 The script creates `dist/Kestrel.app`; it does not install it. Quit Kestrel, move the built app into **Applications**, replace the previous app if present, and open it. Saved data is kept separately. A local build does not notarize the published ZIP.
 
+### Updating
+
+If your wing menu has **Check for Updates…**, use it to download and install a newer version. Automatic checks can be turned off in **Settings → General**; installation always asks first.
+
+Version 1.5.0 and earlier need one manual upgrade to receive this feature: quit Kestrel, replace the app in Applications with the newer download, and reopen it. Your saved settings and snippets remain intact.
+
 ## Demo
 
 ![Kestrel demo](docs/demo/kestrel-demo.gif)
 
-[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · v1.5 walkthrough of search and theme customization using sample data. Background blur varies with your desktop and accessibility settings.
+[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · 43-second English walkthrough of search, daily tools, themes, and in-app updates using sample data. Background blur varies with your desktop and accessibility settings.
 
 ## Use
 
 Type an app or folder name, `file report`, a Google query, `= 12 * 8`, `clip meeting`, or `snip signature`. Use **↑ / ↓** to select, **Return** to open or copy, and **Esc / ⌘ W** to dismiss. **⌘ K** opens actions for the selected result, such as Show in Finder or Copy Path.
 
-Open **Settings** from the wing menu to choose a theme, manage snippets, or enable optional clipboard history. File search uses Spotlight and may need folder access. Clipboard history starts off and stores unencrypted text locally when enabled. Selecting Google search sends that query to your browser; Kestrel has no telemetry or cloud sync.
+Open **Settings** from the wing menu to choose a theme, manage snippets, or enable optional clipboard history. File search uses Spotlight and may need folder access. Clipboard history starts off and stores unencrypted text locally when enabled. Selecting Google search sends that query to your browser; Kestrel has no telemetry or cloud sync. Update checks contact GitHub for release information.
 
 [Setup & help](docs/getting-started.md) · [Release notes](CHANGELOG.md) · [Report an issue](https://github.com/junoh-bg/kestrel/issues) · [MIT license](LICENSE)

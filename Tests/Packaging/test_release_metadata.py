@@ -30,6 +30,18 @@ class ReleaseMetadataTests(unittest.TestCase):
             self.assertEqual(info['CFBundleIdentifier'], 'com.localpilot.launcher')
             self.assertEqual(info['LSMinimumSystemVersion'], '14.0')
 
+    def test_update_policy_requires_signatures_and_install_consent(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / 'Info.plist'
+            self.module.write_info(output, {'version': '2.3.4', 'build': 42})
+            info = plistlib.loads(output.read_bytes())
+            self.assertEqual(info['SUPublicEDKey'], 'PFTV8NVCUW0zrvvqjBXfHFKJUFNEEZLyT6kmtdwfc00=')
+            self.assertEqual(info['SUFeedURL'], 'https://raw.githubusercontent.com/junoh-bg/kestrel/main/docs/updates/appcast.xml')
+            for key in ['SUEnableAutomaticChecks', 'SUVerifyUpdateBeforeExtraction', 'SURequireSignedFeed']:
+                self.assertIs(info[key], True)
+            for key in ['SUAutomaticallyUpdate', 'SUAllowsAutomaticUpdates', 'SUSendProfileInfo']:
+                self.assertIs(info[key], False)
+
     def test_rejects_invalid_versions_and_builds(self):
         invalid = [('1.2', 1), ('01.2.3', 1), ('1.2.3-beta', 1),
                    ('1.2.3', 0), ('1.2.3', True), ('1.2.3', '9')]

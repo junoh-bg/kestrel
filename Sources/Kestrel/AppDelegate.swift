@@ -1,11 +1,12 @@
 import AppKit
 import KestrelCore
 
-@MainActor final class AppDelegate: NSObject, NSApplicationDelegate {
+@MainActor final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
   private var statusItem: NSStatusItem?
   private var model: AppModel?
   private var launcher: LauncherWindow?
   private var settings: SettingsWindow?
+  private var softwareUpdates: SoftwareUpdates?
   private var hotKey: HotKey?
   private var folderAccess: SearchFolderAccess?
   private let catalog = AppCatalog()
@@ -53,6 +54,21 @@ import KestrelCore
         self?.settings?.refresh()
         self?.launcher?.refresh()
       }
+      if !smoke && Bundle.main.object(forInfoDictionaryKey: "SUPublicEDKey") != nil {
+        let updates = SoftwareUpdates()
+        softwareUpdates = updates
+        updates.changed = { [weak settings, weak updates] in
+          guard let updates else { return }
+          settings?.configureUpdates(
+            available: updates.canCheckForUpdates,
+            automaticallyChecks: updates.automaticallyChecksForUpdates)
+        }
+        settings.checkForUpdates = { [weak self] in self?.checkForUpdates() }
+        settings.automaticUpdateChecksChanged = { [weak updates] enabled in
+          updates?.automaticallyChecksForUpdates = enabled
+        }
+        updates.start()
+      }
       setupMenu()
       let hotKey = HotKey { [weak self] in self?.showLauncher() }
       self.hotKey = hotKey
@@ -85,6 +101,7 @@ import KestrelCore
     for (title, action) in [
       ("Open Kestrel", #selector(showLauncher)), ("Clipboard history", #selector(showClipboard)),
       ("Saved snippets", #selector(showSnippets)), ("Settings…", #selector(showSettings)),
+      ("Check for Updates…", #selector(checkForUpdates)),
       ("Refresh applications", #selector(refreshApps)), ("Quit Kestrel", #selector(quit)),
     ] {
       let item = NSMenuItem(title: title, action: action, keyEquivalent: "")
@@ -95,6 +112,11 @@ import KestrelCore
     let main = NSMenu()
     let appItem = NSMenuItem()
     let appMenu = NSMenu()
+    let updateItem = NSMenuItem(
+      title: "Check for Updates…", action: #selector(checkForUpdates), keyEquivalent: "")
+    updateItem.target = self
+    appMenu.addItem(updateItem)
+    appMenu.addItem(.separator())
     let quit = NSMenuItem(title: "Quit Kestrel", action: #selector(quit), keyEquivalent: "q")
     quit.target = self
     appMenu.addItem(quit)
@@ -181,6 +203,14 @@ import KestrelCore
         self.launcher?.refresh()
       }
     }
+  }
+  @objc private func checkForUpdates() {
+    launcher?.dismiss()
+    softwareUpdates?.checkForUpdates()
+  }
+  func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+    menuItem.action == #selector(checkForUpdates)
+      ? softwareUpdates?.canCheckForUpdates == true : true
   }
   @objc private func refreshApps() {
     catalog.refresh()

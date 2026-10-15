@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><!-- sparkle-sign-warning:
+IMPORTANT: This file was signed by Sparkle. Any modifications to this file requires re-signing this file with generate_appcast or sign_update! The signed signature will be embedded at the end of this file.
+--><rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+  <channel>
+    <title>Kestrel updates</title>
+    <link>https://github.com/junoh-bg/kestrel</link>
+    <description>Signed Kestrel preview updates for Apple silicon.</description>
+    <language>en</language>
+  </channel>
+</rss><!-- sparkle-signatures:
+edSignature: otnTW3xARGpRmZLVL3GvoX8nG13i6G1i28c0MvkT55hvDk6AD1P+eHtpAD+kV/rqletGvc16PebSEd+J4z4sAQ==
+length: 607
+-->

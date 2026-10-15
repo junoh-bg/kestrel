@@ -118,7 +118,8 @@ import Testing
   defer { try? FileManager.default.removeItem(at: directory) }
   let board = NSPasteboard.withUniqueName()
   defer { board.clearContents() }
-  let model = try AppModel(directory: directory, pasteboard: board)
+  let model = try AppModel(
+    directory: directory, pasteboard: board, frontmostApplicationID: { "com.kestrel.test" })
   model.setCapture(true)
   board.clearContents()
   board.setString("Controlled clipboard verification", forType: .string)
@@ -909,4 +910,18 @@ import Testing
   settings.capture.performClick(nil)
   #expect(settings.capture.state == .off)
   #expect(!model.captureEnabled)
+}
+
+@Test @MainActor func clipboardPollingStillRejectsSecurityPrompts() throws {
+  let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+  defer { try? FileManager.default.removeItem(at: directory) }
+  let board = NSPasteboard.withUniqueName()
+  defer { board.clearContents() }
+  let model = try AppModel(
+    directory: directory, pasteboard: board,
+    frontmostApplicationID: { "com.apple.SecurityAgent" })
+  model.setCapture(true)
+  board.setString("Controlled sensitive test text", forType: .string)
+  model.checkForClipboardChanges()
+  #expect(model.state.history.isEmpty)
 }
