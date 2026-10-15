@@ -37,6 +37,7 @@ public enum SearchRanking {
     _ candidates: [LaunchCandidate], query: String, events: [UsageEvent], now: Date = Date()
   ) -> [LaunchCandidate] {
     let normalizedQuery = normalize(query.trimmingCharacters(in: .whitespacesAndNewlines))
+    let pathQuery = PathSearchQuery(query)
     let cutoff = now.addingTimeInterval(-7 * 86_400)
     var queryUses = [String: [String: Int]]()
     var recentUses = [String: Int]()
@@ -51,7 +52,13 @@ public enum SearchRanking {
     }
     let scored = candidates.enumerated().compactMap {
       index, candidate -> (LaunchCandidate, Int, Int, Int, Int)? in
-      guard let relevance = relevance(of: normalize(candidate.title), for: normalizedQuery) else {
+      let score: Int?
+      if let pathQuery {
+        score = pathQuery.relevance(of: candidate)
+      } else {
+        score = relevance(of: normalize(candidate.title), for: normalizedQuery)
+      }
+      guard let relevance = score else {
         return nil
       }
       return (
