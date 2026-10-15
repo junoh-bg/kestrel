@@ -1,13 +1,46 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><!-- sparkle-sign-warning:
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- sparkle-sign-warning:
 IMPORTANT: This file was signed by Sparkle. Any modifications to this file requires re-signing this file with generate_appcast or sign_update! The signed signature will be embedded at the end of this file.
---><rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
-  <channel>
-    <title>Kestrel updates</title>
-    <link>https://github.com/junoh-bg/kestrel</link>
-    <description>Signed Kestrel preview updates for Apple silicon.</description>
-    <language>en</language>
-  </channel>
-</rss><!-- sparkle-signatures:
-edSignature: otnTW3xARGpRmZLVL3GvoX8nG13i6G1i28c0MvkT55hvDk6AD1P+eHtpAD+kV/rqletGvc16PebSEd+J4z4sAQ==
-length: 607
+-->
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Kestrel updates</title>
+        <link>https://github.com/junoh-bg/kestrel</link>
+        <description>Signed Kestrel preview updates for Apple silicon.</description>
+        <language>en</language>
+        <item>
+            <title>1.6.0</title>
+            <pubDate>Thu, 15 Oct 2026 10:49:23 +0900</pubDate>
+            <link>https://github.com/junoh-bg/kestrel</link>
+            <sparkle:version>11</sparkle:version>
+            <sparkle:shortVersionString>1.6.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description><![CDATA[<pre># Kestrel 1.6.0 — Software updates preview
+
+Kestrel can now check for updates and install them with your approval.
+
+- **Check for Updates…** is available in the wing menu, app menu, and Settings → General.
+- Automatic checks are on by default. Turn them off in General settings for manual checks only. You choose when to download, install, and relaunch.
+- Update feeds and downloads are signed and verified. Invalid updates are rejected, and system-profile reporting is disabled.
+- The refreshed English demo covers daily tools, five themes, and update controls.
+
+## Install or upgrade
+
+Download `Kestrel-1.6.0-macos-arm64.zip`, unzip it, and move Kestrel.app into Applications. Version 1.5.0 and earlier need this one manual replacement to acquire the updater: quit the old app first, replace it, and reopen. Saved settings and snippets remain in place. Press **Option–Space** to start.
+
+## Compatibility and limitations
+
+- Apple silicon, macOS 14 or later. Build 11.
+- This preview is ad-hoc signed and **not Apple-notarized**. If macOS cannot verify a trusted download, follow the [first-launch guide](https://github.com/junoh-bg/kestrel/blob/main/docs/getting-started.md#first-launch). Update signing does not remove Apple&#x27;s first-launch approval requirements.
+- Verified locally on macOS 27.0.1, including an isolated signed upgrade and rejection of a tampered archive. A separate-Mac download and macOS 14 acceptance remain unverified.
+- Ad-hoc replacements may require renewed macOS folder-access approval. Clipboard history remains optional and starts off for new installations.
+</pre>]]></description>
+            <enclosure url="https://github.com/junoh-bg/kestrel/releases/download/v1.6.0/Kestrel-1.6.0-macos-arm64.zip" length="1392825" type="application/octet-stream" sparkle:edSignature="OEjTNiPjUU3vytxIVoNNpp5UpU7iyLhCSRR6peFtuRTe3w8CqVtNlf1cF+tLp8/iRWJpJj3qudSwULlso9BFCQ=="/>
+        </item>
+    </channel>
+</rss>
+<!-- sparkle-signatures:
+edSignature: HIXEifkWGdl3CGhz5hOEoff3+3WafT3V01gxQcK8CYEHk0P4DeDa1Ea8VbIWql2I7+4e2sYZm3xodCAy9vQFBw==
+length: 3045
 -->

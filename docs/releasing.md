@@ -45,7 +45,7 @@ Release notes should describe what users get, what changed, setup/upgrade requir
 
 ## Signed in-app updates
 
-Sparkle 2.10.0 is pinned in `Package.swift` and `Package.resolved`. `package.sh` embeds its framework, helpers, and license. `scripts/release_metadata.py` owns the public verification key, HTTPS feed URL, and consent/privacy policy. Both feed and archive signatures are required; archive verification happens before extraction. The signed empty feed is intentional until the first updater-enabled release is published.
+Sparkle 2.10.0 is pinned in `Package.swift` and `Package.resolved`. `package.sh` embeds its framework, helpers, and license. `scripts/release_metadata.py` owns the public verification key, HTTPS feed URL, and consent/privacy policy. Both feed and archive signatures are required; archive verification happens before extraction. The signed feed lists published updater-enabled releases. Preserve its exact bytes and signatures when publishing.
 
 The publishing key is stored in the release maintainer's macOS Keychain under account `junoh-bg.kestrel`. Never export it into the repository or CI logs. Other contributors can build without it. Publishing requires access to this Keychain; CI does not currently publish updates. Losing the key without a rotation plan can require users to install manually again.
 
