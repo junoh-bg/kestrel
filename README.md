@@ -30,9 +30,9 @@ The agent can handle installation, but macOS may still require **your approval**
 
 ### Download and install yourself
 
-[**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.5.0/Kestrel-1.5.0-macos-arm64.zip)
+[**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.6.0/Kestrel-1.6.0-macos-arm64.zip)
 
-v1.5.0 preview · [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.5.0) · [SHA-256 checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.5.0/Kestrel-1.5.0-macos-arm64.zip.sha256)
+v1.6.0 preview · [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.6.0) · [SHA-256 checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.6.0/Kestrel-1.6.0-macos-arm64.zip.sha256)
 
 1. Unzip the download and drag **Kestrel.app** into **Applications**.
 2. Open Kestrel. If macOS blocks it, follow the steps below.
@@ -64,13 +64,13 @@ The script creates `dist/Kestrel.app`; it does not install it. Quit Kestrel, mov
 
 If your wing menu has **Check for Updates…**, use it to download and install a newer version. Automatic checks can be turned off in **Settings → General**; installation always asks first.
 
-The current v1.5.0 download predates this feature. To upgrade it, quit Kestrel, replace the app in Applications with the newer download, and reopen it. Your saved settings and snippets remain intact.
+Version 1.5.0 and earlier need one manual upgrade to receive this feature: quit Kestrel, replace the app in Applications with the newer download, and reopen it. Your saved settings and snippets remain intact.
 
 ## Demo
 
 ![Kestrel demo](docs/demo/kestrel-demo.gif)
 
-[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · 43-second English walkthrough of search, daily tools, themes, and upcoming in-app updates using sample data. Background blur varies with your desktop and accessibility settings.
+[Watch or download the short demo (MP4)](docs/demo/kestrel-demo.mp4) · 43-second English walkthrough of search, daily tools, themes, and in-app updates using sample data. Background blur varies with your desktop and accessibility settings.
 
 ## Use
 

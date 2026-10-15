@@ -12,7 +12,7 @@ Kestrel is distributed as MIT-licensed source and a prebuilt macOS app ZIP on Gi
 
 ## Compatibility record
 
-The 1.5.0 preview targets Apple silicon and macOS 14+. Local automated tests, packaging, and startup checks have run on macOS 27.0.1. A separate-Mac downloaded installation, macOS 14 acceptance, and a signed upgrade have not been verified. Do not describe these as completed or claim a warning-free installation.
+The 1.6.0 preview targets Apple silicon and macOS 14+. Local automated tests, packaging, and startup checks have run on macOS 27.0.1. An isolated signed upgrade and rejection of a tampered download were verified. A separate-Mac downloaded installation and macOS 14 acceptance have not been verified. Do not describe these as completed or claim a warning-free installation.
 
 ## Manual acceptance
 

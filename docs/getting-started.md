@@ -4,7 +4,7 @@ Kestrel is a menu-bar launcher for Apple silicon Macs running macOS 14 or later.
 
 ## Install
 
-1. Download [Kestrel 1.5.0 for Mac (.zip)](https://github.com/junoh-bg/kestrel/releases/download/v1.5.0/Kestrel-1.5.0-macos-arm64.zip). This is the ready-to-use app, not GitHub’s source-code ZIP. [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.5.0) and a [checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.5.0/Kestrel-1.5.0-macos-arm64.zip.sha256) are available separately.
+1. Download [Kestrel 1.6.0 for Mac (.zip)](https://github.com/junoh-bg/kestrel/releases/download/v1.6.0/Kestrel-1.6.0-macos-arm64.zip). This is the ready-to-use app, not GitHub’s source-code ZIP. [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.6.0) and a [checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.6.0/Kestrel-1.6.0-macos-arm64.zip.sha256) are available separately.
 2. Unzip the archive. Move **Kestrel.app** into **Applications** using Finder.
 3. Open Kestrel from Applications. Use **Option–Space** or the **wing icon** in the menu bar to bring it back.
 
@@ -52,7 +52,7 @@ If you choose to [build from source](development.md), `scripts/package.sh` creat
 
 In builds with **Check for Updates…**, open that option from the wing menu or **Settings → General**. Kestrel checks automatically by default and shows the available version and release notes. You choose when to download, install, and relaunch. Turn off **Check automatically** in General settings to use manual checks only. Save any snippet draft before restarting; choosing to cancel the quit keeps it open.
 
-The published v1.5.0 app does not include the updater. It needs one manual upgrade: quit Kestrel, keep a backup of the previous app if needed, replace the copy in Applications with the newer download, and reopen it. Your saved data remains in place. Keep only one active installed copy to avoid shortcut and permission confusion.
+Version 1.5.0 and earlier do not include the updater. They need one manual upgrade: quit Kestrel, keep a backup of the previous app if needed, replace the copy in Applications with the newer download, and reopen it. Your saved data remains in place. Keep only one active installed copy to avoid shortcut and permission confusion.
 
 Update feeds and downloads are verified with Kestrel's update-signing key. If verification fails, the update is rejected; retry later or report the error. This verification does not replace Apple notarization. Ad-hoc updates may still need macOS access approvals again.
 

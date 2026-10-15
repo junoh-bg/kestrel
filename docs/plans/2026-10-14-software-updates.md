@@ -25,6 +25,8 @@ Verification on the development Mac:
 - A signed feed pointing to a one-byte-modified ZIP produced Sparkle's “improperly signed” error and retained build 2. Public-key-only verification independently accepted the original archive and rejected the altered one.
 - The release ZIP preparation and signed-feed generation completed locally after Keychain approval. The generated feed correctly identifies the app version/build, macOS 14 minimum, Apple silicon requirement, and versioned asset URL; signature verification passed. This test feed was not published.
 
-No release has been published by this change. The installed v1.5.0 app still needs one manual upgrade after the updater release is approved. Separate-Mac download/Gatekeeper validation and macOS 14 coverage remain release checks; updater signing does not provide Apple notarization.
+Version 1.6.0 (build 11) is the first updater-enabled release. The installed v1.5.0 app needs one manual upgrade. Separate-Mac download/Gatekeeper validation and macOS 14 coverage remain release checks; updater signing does not provide Apple notarization.
 
-The refreshed English demo covers apps, folders, files, calculator, Google search, clipboard history, snippets, five themes, and update controls. The updater segment is explicitly labeled “Coming next” until release. Native views use isolated sample data and the opaque accessibility fallback.
+The refreshed English demo covers apps, folders, files, calculator, Google search, clipboard history, snippets, five themes, and update controls. The release demo shows the available update controls. Native views use isolated sample data and the opaque accessibility fallback.
+
+Final 1.6.0 release checks on 2026-10-15 passed: 75 serial Swift tests, eight packaging tests, release build/package, nested signatures, isolated packaged startup, strict formatting, and diff checks. The 43-second H.264 MP4 was re-rendered with shipped-feature wording, decoded fully, and visually checked. No new blocking findings were identified in the final updater/release review.
