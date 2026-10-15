@@ -9,6 +9,34 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
         <description>Signed Kestrel preview updates for Apple silicon.</description>
         <language>en</language>
         <item>
+            <title>1.7.1</title>
+            <pubDate>Thu, 15 Oct 2026 17:15:46 +0900</pubDate>
+            <link>https://github.com/junoh-bg/kestrel</link>
+            <sparkle:version>14</sparkle:version>
+            <sparkle:shortVersionString>1.7.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description><![CDATA[<pre># Kestrel 1.7.1 — Newly installed apps appear automatically
+
+Kestrel now refreshes its app list in the background whenever you open the launcher, and every five seconds while it stays visible. Apps installed after Kestrel starts—including apps inside Applications subfolders—appear without restarting or using Refresh applications. Renamed and removed apps are updated too.
+
+The previous list stays available while refreshing, so typing remains responsive. Search results update when a changed list is ready. App discovery reads the Applications folders directly and does not wait for Spotlight indexing.
+
+## Update
+
+Choose **Check for Updates…** in the wing menu or General settings. Automatic checks notify you; installation asks first. Settings, snippets, and clipboard history remain in place.
+
+Official builds retain the signing identity introduced in 1.7.0. Users upgrading directly from 1.6.1 or earlier may need the [one-time Full Disk Access refresh](https://github.com/junoh-bg/kestrel/blob/main/docs/getting-started.md#one-time-permission-refresh-for-170). Full Disk Access was retained in our signed-update test; this does not guarantee that macOS will permit the app to open without a separate security approval.
+
+## macOS may ask to allow Kestrel again
+
+If macOS blocks opening Kestrel, use **System Settings → Privacy &amp; Security → Open Anyway** for a trusted download, then authenticate and confirm **Open**. See the [first-launch guide](https://github.com/junoh-bg/kestrel/blob/main/docs/getting-started.md#first-launch). This app-opening approval is separate from Full Disk Access. The persistent certificate keeps the app identity consistent; it does not provide Apple Developer ID or notarization, so we cannot promise warning-free updates. Do not disable Gatekeeper. If the message says malware was detected or the app is damaged, stop and report it.
+
+Apple silicon · macOS 14+ · build 14 · preview. This app is self-signed, not Apple-notarized; the initial installation warning remains.
+</pre>]]></description>
+            <enclosure url="https://github.com/junoh-bg/kestrel/releases/download/v1.7.1/Kestrel-1.7.1-macos-arm64.zip" length="1413474" type="application/octet-stream" sparkle:edSignature="JXeiK63Jcchx49XTlSmAdpWs7exc8qLSHkxXjkK8u/et7vME9CL2KqO8vvr6vy8PED84/Gbw4dECPAaVSZ8IDw=="/>
+        </item>
+        <item>
             <title>1.7.0</title>
             <pubDate>Thu, 15 Oct 2026 14:47:48 +0900</pubDate>
             <link>https://github.com/junoh-bg/kestrel</link>
@@ -70,39 +98,9 @@ Apple silicon, macOS 14+, build 12. This preview remains ad-hoc signed and **not
 </pre>]]></description>
             <enclosure url="https://github.com/junoh-bg/kestrel/releases/download/v1.6.1/Kestrel-1.6.1-macos-arm64.zip" length="1392712" type="application/octet-stream" sparkle:edSignature="Cd9KEtEqhC5l4195wbN34zWdkrANH26t775aici4h6flCwON7063+vV/+2YmPTUzl7X8QCukBW7nnx8zho1uDw=="/>
         </item>
-        <item>
-            <title>1.6.0</title>
-            <pubDate>Thu, 15 Oct 2026 10:49:23 +0900</pubDate>
-            <link>https://github.com/junoh-bg/kestrel</link>
-            <sparkle:version>11</sparkle:version>
-            <sparkle:shortVersionString>1.6.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description><![CDATA[<pre># Kestrel 1.6.0 — Software updates preview
-
-Kestrel can now check for updates and install them with your approval.
-
-- **Check for Updates…** is available in the wing menu, app menu, and Settings → General.
-- Automatic checks are on by default. Turn them off in General settings for manual checks only. You choose when to download, install, and relaunch.
-- Update feeds and downloads are signed and verified. Invalid updates are rejected, and system-profile reporting is disabled.
-- The refreshed English demo covers daily tools, five themes, and update controls.
-
-## Install or upgrade
-
-Download `Kestrel-1.6.0-macos-arm64.zip`, unzip it, and move Kestrel.app into Applications. Version 1.5.0 and earlier need this one manual replacement to acquire the updater: quit the old app first, replace it, and reopen. Saved settings and snippets remain in place. Press **Option–Space** to start.
-
-## Compatibility and limitations
-
-- Apple silicon, macOS 14 or later. Build 11.
-- This preview is ad-hoc signed and **not Apple-notarized**. If macOS cannot verify a trusted download, follow the [first-launch guide](https://github.com/junoh-bg/kestrel/blob/main/docs/getting-started.md#first-launch). Update signing does not remove Apple&#x27;s first-launch approval requirements.
-- Verified locally on macOS 27.0.1, including an isolated signed upgrade and rejection of a tampered archive. A separate-Mac download and macOS 14 acceptance remain unverified.
-- Ad-hoc replacements may require renewed macOS folder-access approval. Clipboard history remains optional and starts off for new installations.
-</pre>]]></description>
-            <enclosure url="https://github.com/junoh-bg/kestrel/releases/download/v1.6.0/Kestrel-1.6.0-macos-arm64.zip" length="1392825" type="application/octet-stream" sparkle:edSignature="OEjTNiPjUU3vytxIVoNNpp5UpU7iyLhCSRR6peFtuRTe3w8CqVtNlf1cF+tLp8/iRWJpJj3qudSwULlso9BFCQ=="/>
-        </item>
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: 9deDgOMcpSHyUepTv3HxeYGwKqUC1UFWcCTbtf3PXrXeagCvou6pCEQlZ2WSEIVJmMhdrPPsAU0lVvi5YYkeDg==
-length: 7922
+edSignature: yhDy6WIBWhtQhG0dqtn13bIwLmWHxSra9upPXrssE1GAUvSpA3gJLCkoK1J6/9y4RW5KVyOO5y7KmR5C2K+uCg==
+length: 8349
 -->
