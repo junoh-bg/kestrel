@@ -4,7 +4,7 @@ Kestrel is a menu-bar launcher for Apple silicon Macs running macOS 14 or later.
 
 ## Install
 
-1. Download [Kestrel 1.6.1 for Mac (.zip)](https://github.com/junoh-bg/kestrel/releases/download/v1.6.1/Kestrel-1.6.1-macos-arm64.zip). This is the ready-to-use app, not GitHub’s source-code ZIP. [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.6.1) and a [checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.6.1/Kestrel-1.6.1-macos-arm64.zip.sha256) are available separately.
+1. Download [Kestrel 1.7.0 for Mac (.zip)](https://github.com/junoh-bg/kestrel/releases/download/v1.7.0/Kestrel-1.7.0-macos-arm64.zip). This is the ready-to-use app, not GitHub’s source-code ZIP. [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.7.0) and a [checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.7.0/Kestrel-1.7.0-macos-arm64.zip.sha256) are available separately.
 2. Unzip the archive. Move **Kestrel.app** into **Applications** using Finder.
 3. Open Kestrel from Applications. Use **Option–Space** or the **wing icon** in the menu bar to bring it back.
 
@@ -12,7 +12,7 @@ Kestrel does not automatically start at login. If you want that behavior, add it
 
 ## First launch
 
-The current preview is ad-hoc signed, **not signed with a Developer ID certificate or notarized by Apple**. A successful build or checksum does not change that status. macOS may block a downloaded copy.
+The current preview uses a persistent self-signed identity, **not signed with a Developer ID certificate or notarized by Apple**. A successful build or checksum does not change that status. macOS may block a downloaded copy.
 
 If the warning says Apple **cannot check Kestrel for malicious software** or **cannot verify its developer**, that describes a verification limitation; it is different from a warning that malware was detected. For a copy you trust from this repository and that your organization permits:
 
@@ -36,11 +36,11 @@ If you choose to [build from source](development.md), `scripts/package.sh` creat
 - **Snippets:** create reusable text in **Settings → Snippets**. Search with `snip`, then Return copies a snippet for manual pasting.
 - **Appearance:** choose a palette in **Settings → Appearance**. The choice is saved immediately.
 
-## Nested path search (next release)
+## Nested path search
 
-The development build also accepts `dev/docs` for a `docs` folder directly inside `dev`, or `kestrel/docs/demo` for a deeper path. Use `dev/do` for a partial final name, `file dev/report` to limit results to files and folders, or append `/` to show only folders. Parent names are complete adjacent names; `dev/docs` does not match `dev/project/docs`.
+Kestrel accepts `dev/docs` for a `docs` folder directly inside `dev`, or `kestrel/docs/demo` for a deeper path. Use `dev/do` for a partial final name, `file dev/report` to limit results to files and folders, or append `/` to show only folders. Parent names are complete adjacent names; `dev/docs` does not match `dev/project/docs`.
 
-Home paths such as `~/Desktop/dev/docs` and absolute paths work too. Searches remain local and use Spotlight's index with your existing macOS permissions; they do not scan every file or execute commands. This feature is not in the v1.6.1 ZIP yet.
+Home paths such as `~/Desktop/dev/docs` and absolute paths work too. Searches remain local and use Spotlight's index with your existing macOS permissions; they do not scan every file or execute commands.
 
 ## When something is missing
 
@@ -52,7 +52,17 @@ Home paths such as `~/Desktop/dev/docs` and absolute paths work too. Searches re
 | “Readable” appears but a file is still missing | This only confirms folder-listing access. Spotlight coverage and result limits are separate. |
 | Clipboard search is empty | Enable history, then copy ordinary text. Earlier clipboard contents are not imported. Some sensitive/transient content is intentionally skipped. |
 | Closing the panel does not quit the app | This is expected. Use **Quit Kestrel** in the wing menu. |
-| Access stops working after an update | Quit/reopen Kestrel and check access. Ad-hoc-signed replacements may need permission approval again. |
+| Access stops working after an update | Follow the one-time permission refresh below when upgrading from 1.6.1 or earlier. Source builds can also change the identity. |
+
+## One-time permission refresh for 1.7.0
+
+If you previously enabled Full Disk Access, updating from 1.6.1 or earlier may require one final approval because Kestrel now uses a persistent signing identity. If protected-folder search stops working:
+
+1. Open **System Settings → Privacy & Security → Full Disk Access**.
+2. Remove the old **Kestrel** permission entry, then use **+** to add **/Applications/Kestrel.app** and enable it. Authenticate if prompted. This removes only the permission entry, not the app or your data.
+3. Choose **Quit & Reopen** and use **Kestrel Settings → Search → Check access**.
+
+Future official releases using this identity are intended to preserve approval. A real Sparkle update retained it on macOS 27.0.1; other Macs and older supported versions remain unverified. Full Disk Access is optional, and you do not need to install a certificate or create keys. Local ad-hoc builds or certificate changes may require approval again.
 
 ## Updates and uninstall
 
@@ -60,7 +70,7 @@ In builds with **Check for Updates…**, open that option from the wing menu or 
 
 Version 1.5.0 and earlier do not include the updater. They need one manual upgrade: quit Kestrel, keep a backup of the previous app if needed, replace the copy in Applications with the newer download, and reopen it. Your saved data remains in place. Keep only one active installed copy to avoid shortcut and permission confusion.
 
-Update feeds and downloads are verified with Kestrel's update-signing key. If verification fails, the update is rejected; retry later or report the error. This verification does not replace Apple notarization. Ad-hoc updates may still need macOS access approvals again.
+Update feeds and downloads are verified with Kestrel's update-signing key. If verification fails, the update is rejected; retry later or report the error. This verification does not replace Apple notarization. Official releases from 1.7.0 use a stable identity; the transition from older builds may require one final approval. Source builds use ad-hoc signing and can require approval again.
 
 To uninstall, quit Kestrel and move **Kestrel.app** to the Trash. Preferences and snippets remain in your user account so reinstalling does not erase them. Use **Settings → General → Show Data Folder** before uninstalling if you want to back up or remove that data; review its contents before deleting it.
 

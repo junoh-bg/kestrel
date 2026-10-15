@@ -2,13 +2,15 @@
 
 User-facing changes are recorded here. Release versions follow `MAJOR.MINOR.PATCH`.
 
-## Unreleased
+## [1.7.0] — 2026-10-15 · Nested search and lasting permissions
 
-- Add persistent certificate-bound app signing for maintainer releases, separate from Sparkle update signing. Initial macOS installation warnings remain.
+- Added persistent certificate-bound app signing for maintainer releases, separate from Sparkle update signing. Initial macOS installation warnings remain.
 
 - Added nested path search: `dev/docs`, `kestrel/docs/demo`, and partial final names such as `dev/do`.
 - Supports files, `~/` and absolute paths; a trailing slash limits results to folders. Parent names match adjacent directories exactly (ignoring case and accents).
 - Resolves matching parent folders before applying result limits, so unrelated names cannot crowd out a path match. Spotlight indexing and macOS access still apply.
+
+**Existing users:** upgrading from 1.6.1 or earlier may require one final Full Disk Access approval for the new signing identity. [Release notes and steps](docs/releases/1.7.0.md).
 
 ## [1.6.1] — 2026-10-15 · Settings readability fix
 

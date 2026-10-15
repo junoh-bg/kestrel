@@ -26,4 +26,14 @@ Updates: https://github.com/junoh-bg/kestrel/releases
 Use Check for Updates in the wing menu to install future versions. Automatic
 checks can be disabled in Settings > General; installation always asks first.
 Version 1.5.0 and earlier need one manual app replacement to get this updater.
+UPGRADING FROM 1.6.1 OR EARLIER
+If you previously enabled Full Disk Access, macOS may need one final approval
+for Kestrel's new persistent signing identity. If protected-folder search stops:
+System Settings > Privacy & Security > Full Disk Access: remove the old Kestrel
+permission entry, use + to add /Applications/Kestrel.app, enable it, and choose
+Quit & Reopen. This removes only the permission entry, not your app or data.
+Full Disk Access remains optional. You do not need to install certificates.
+Future official updates using the same identity are intended to retain access;
+verified on macOS 27.0.1, with other Macs and older versions still unverified.
+
 To uninstall, quit and move the app to Trash. Saved data is retained.
