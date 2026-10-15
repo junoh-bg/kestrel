@@ -4,6 +4,8 @@ User-facing changes are recorded here. Release versions follow `MAJOR.MINOR.PATC
 
 ## Unreleased
 
+- Add persistent certificate-bound app signing for maintainer releases, separate from Sparkle update signing. Initial macOS installation warnings remain.
+
 - Added nested path search: `dev/docs`, `kestrel/docs/demo`, and partial final names such as `dev/do`.
 - Supports files, `~/` and absolute paths; a trailing slash limits results to folders. Parent names match adjacent directories exactly (ignoring case and accents).
 - Resolves matching parent folders before applying result limits, so unrelated names cannot crowd out a path match. Spotlight indexing and macOS access still apply.

@@ -20,15 +20,34 @@ Run the checks in [development.md](development.md), then:
 scripts/release.sh
 ```
 
-Follow the [release checklist](release-readiness.md). Publish ad-hoc-signed builds as previews with an explicit notarization caveat and first-launch instructions.
+Follow the [release checklist](release-readiness.md). Publish self-signed builds as previews with an explicit notarization caveat and first-launch instructions.
 
-This creates a new directory under `dist/releases/` containing a versioned app ZIP and SHA-256 file. The ZIP includes the app, plain-text installation guide, license, and release notes. The script never publishes anything and retains previous output. It currently builds only Apple silicon and uses ad-hoc signing; do not call its output notarized.
+This creates a new directory under `dist/releases/` containing a versioned app ZIP and SHA-256 file. The ZIP includes the app, plain-text installation guide, license, and release notes. The script never publishes anything and retains previous output. It currently builds only Apple silicon and requires the persistent Kestrel code-signing identity in Keychain; do not call its output notarized. Missing signing credentials fail the release build instead of falling back to ad-hoc signing.
 
 From the output directory, verify `shasum -a 256 -c Kestrel-<version>-macos-arm64.zip.sha256`. Extract the ZIP into a fresh folder, verify the app with `codesign --verify --deep --strict`, and run its executable with `--smoke-test` in a logged-in macOS session. Test an actual downloaded copy on a separate Mac before widening distribution.
 
+## Persistent self-signed identity
+
+Kestrel uses two independent signing keys:
+
+- **App identity:** `Kestrel Code Signing` in the maintainer's login Keychain. `config/code-signing.json` contains only its public certificate fingerprints and bundle identifier. The certificate expires in October 2036.
+- **Update authenticity:** the existing Sparkle Ed25519 key under `junoh-bg.kestrel`. This signs archives and feeds; it does not establish macOS privacy identity.
+
+`scripts/package.sh --release-signing` and `scripts/release.sh` require the pinned app certificate. The designated requirement binds `com.localpilot.launcher` to that exact certificate. The signing script verifies the final bundle against that requirement and preserves Sparkle's nested vendor signatures. Never weaken the requirement to a bundle identifier alone, regenerate the certificate during builds, or fall back to ad-hoc signing for a published release.
+
+Self-signing does not provide notarization or remove Gatekeeper's initial warning. Full Disk Access survived an actual signed Sparkle update on macOS 27.0.1; see the [test report](plans/2026-10-15-persistent-app-signing.md). Repeat on another Mac without the maintainer certificate in Keychain and on older supported macOS versions before widening the claim. Migration from older ad-hoc builds may require one final permission refresh. Certificate replacement, expiry, or key loss requires a migration plan. Keep the private key in Keychain; any recovery backup must be separately approved, encrypted, and kept outside Git. Users do not need to install our certificate or trust a new root.
+
+Maintainer signing regression check (requires Keychain approval if prompted):
+
+```sh
+KESTREL_TEST_RELEASE_SIGNING=1 python3 -B -m unittest discover -s Tests/Packaging -p test_sign_app.py -v
+```
+
+Ordinary source builds remain ad-hoc and require neither key. Replacing a signed release with an ad-hoc source build changes its identity and may require permission approval again.
+
 ## Developer ID and notarization
 
-For a normal download-and-open release, obtain a **Developer ID Application** certificate for the publisher. Sign the final app with hardened runtime and a secure timestamp. Submit an archive with Apple's `notarytool` using Keychain-stored credentials; wait for acceptance, staple and validate the ticket on the app, then create a new final ZIP and checksum from that stapled app. Verify the signature and Gatekeeper assessment. Do not rerun `release.sh` afterward because it rebuilds and applies an ad-hoc signature.
+For a normal download-and-open release, obtain a **Developer ID Application** certificate for the publisher. Sign the final app with hardened runtime and a secure timestamp. Submit an archive with Apple's `notarytool` using Keychain-stored credentials; wait for acceptance, staple and validate the ticket on the app, then create a new final ZIP and checksum from that stapled app. Verify the signature and Gatekeeper assessment. Do not rerun `release.sh` afterward because it rebuilds and applies the configured self-signed signature.
 
 An Apple Development certificate is not sufficient for this distribution path. Do not place certificates, private keys, or notarization credentials in Git. See [Apple's guidance](https://developer.apple.com/developer-id/) and [notarization workflow](https://developer.apple.com/documentation/security/customizing-the-notarization-workflow).
 
