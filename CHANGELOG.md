@@ -2,6 +2,14 @@
 
 User-facing changes are recorded here. Release versions follow `MAJOR.MINOR.PATCH`.
 
+## [1.6.1] — 2026-10-15 · Settings readability fix
+
+- Fixed dark checkbox labels in General and Clipboard settings when macOS uses the app's older SDK compatibility mode.
+- Kept checkbox labels readable across all five themes, including checked, unchecked, and disabled states.
+- Added visual regression checks for both legacy and current AppKit rendering paths.
+
+[Release notes](docs/releases/1.6.1.md)
+
 ## [1.6.0] — 2026-10-15 · Software updates preview
 
 - Refreshed the English demo with clipboard history, all five themes, and in-app updates.

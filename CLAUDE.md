@@ -19,3 +19,5 @@ Launcher Command shortcuts must work with non-Latin input methods as well as Lat
 Visual harnesses must change palettes through the same Settings action as the app and verify that the stored model and rendered palette agree. Directly resetting the global palette can leave detached Settings pages in the previous theme.
 
 Updater checks are user-controlled and installation always requires consent. Never enable unattended installs or system-profile reporting. Keep feed and archive signatures required, verify archives before extraction, and preserve Sparkle framework symlinks and nested signatures. Signing keys stay in Keychain; publish the tested asset before its signed feed, following docs/releasing.md.
+
+For native-control changes, run `scripts/check-control-contrast.sh` and inspect the packaged app. Match the release binary's SDK compatibility mode in visual harnesses; a newer-SDK preview can hide a legacy AppKit label-color regression.

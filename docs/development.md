@@ -19,12 +19,13 @@ swift test --no-parallel
 python3 -B -m unittest discover -s Tests/Packaging -v
 swift build -c release
 scripts/package.sh
+scripts/check-control-contrast.sh
 dist/Kestrel.app/Contents/MacOS/Kestrel --smoke-test
 xcrun swift-format lint --strict --recursive Sources Tests Package.swift scripts/MakeIcon.swift
 git diff --check
 ```
 
-Native tests require a logged-in Mac and Spotlight indexing. Run them serially: AppKit shares process state and some search tests have fixed timing assumptions. Smoke mode uses temporary data and ignores saved user data. Check live theme transitions as well as automated tests when changing native controls.
+Native tests require a logged-in Mac and Spotlight indexing. Run them serially: AppKit shares process state and some search tests have fixed timing assumptions. Smoke mode uses temporary data and ignores saved user data. Check live theme transitions as well as automated tests when changing native controls. `check-control-contrast.sh` renders checkbox labels under both macOS 14 and current SDK compatibility modes; the unit-test host and a standalone preview can otherwise use a different AppKit rendering path from the packaged app.
 
 For demo exports, normalize native PNG captures to a single pixel format before concatenating them. AppKit may produce mixed 8-bit and 16-bit frames; video filter reinitialization can otherwise alter timing and skip visible scenes. Check the encoded video, not only its source frames.
 

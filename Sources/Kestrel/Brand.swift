@@ -325,6 +325,15 @@ enum KestrelTheme: String, CaseIterable {
     styled.addAttribute(
       .foregroundColor, value: button.titleColor.withAlphaComponent(isEnabled ? 1 : 0.5),
       range: NSRange(location: 0, length: styled.length))
-    return super.drawTitle(styled, withFrame: frame, in: controlView)
+    guard button is KestrelCheckbox else {
+      return super.drawTitle(styled, withFrame: frame, in: controlView)
+    }
+    // Older SDK compatibility paths replace attributed checkbox colors inside
+    // NSButtonCell.drawTitle. Keep its native glyph and draw just the label.
+    let height = min(frame.height, ceil(styled.size().height))
+    let titleFrame = NSRect(
+      x: frame.minX, y: frame.midY - height / 2, width: frame.width, height: height)
+    styled.draw(in: titleFrame)
+    return titleFrame
   }
 }
