@@ -4,7 +4,7 @@ Kestrel is a menu-bar launcher for Apple silicon Macs running macOS 14 or later.
 
 ## Install
 
-1. Download [Kestrel 1.7.0 for Mac (.zip)](https://github.com/junoh-bg/kestrel/releases/download/v1.7.0/Kestrel-1.7.0-macos-arm64.zip). This is the ready-to-use app, not GitHub’s source-code ZIP. [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.7.0) and a [checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.7.0/Kestrel-1.7.0-macos-arm64.zip.sha256) are available separately.
+1. Download [Kestrel 1.7.1 for Mac (.zip)](https://github.com/junoh-bg/kestrel/releases/download/v1.7.1/Kestrel-1.7.1-macos-arm64.zip). This is the ready-to-use app, not GitHub’s source-code ZIP. [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.7.1) and a [checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.7.1/Kestrel-1.7.1-macos-arm64.zip.sha256) are available separately.
 2. Unzip the archive. Move **Kestrel.app** into **Applications** using Finder.
 3. Open Kestrel from Applications. Use **Option–Space** or the **wing icon** in the menu bar to bring it back.
 
@@ -26,6 +26,8 @@ These are Apple's [per-app approval steps](https://support.apple.com/en-us/10244
 If the warning says the app **will damage your computer**, **contains malware**, or **is damaged**, stop and [report the exact message](https://github.com/junoh-bg/kestrel/issues). Do not treat those warnings as the routine unnotarized-preview warning.
 
 If you choose to [build from source](development.md), `scripts/package.sh` creates `dist/Kestrel.app` but does not install it. Quit the old app and replace the copy in Applications with the newly built app. Keep your saved data; rebuilding does not notarize the downloaded ZIP.
+
+If macOS blocks opening Kestrel again after replacing or updating it, the same per-app approval may be needed. This is separate from Full Disk Access: stable signing helps retain folder permissions but does not provide Apple notarization or guarantee warning-free updates.
 
 ## First-minute setup
 

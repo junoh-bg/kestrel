@@ -65,6 +65,7 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
   private var rows: [LauncherRow] = []
   private var searchVersion = 0
   private var debounce: DispatchWorkItem?
+  private var catalogRefreshTimer: Timer?
   private var currentQuery = ""
   private var selectedKey: String?
   private var reloading = false
@@ -87,6 +88,7 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
       contentRect: NSRect(x: 0, y: 0, width: 660, height: 126),
       styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
     super.init()
+    catalog.changed = { [weak self] in self?.refresh() }
     panel.onDismiss = { [weak self] in self?.dismiss() }
     panel.onActions = { [weak self] in self?.showActions() }
     panel.title = "Kestrel"
@@ -289,6 +291,18 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
     panel.makeKeyAndOrderFront(nil)
     panel.makeFirstResponder(input)
     input.selectText(nil)
+    catalog.refreshInBackground()
+    catalogRefreshTimer?.invalidate()
+    catalogRefreshTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) {
+      [weak self] timer in
+      MainActor.assumeIsolated {
+        guard let self, self.panel.isVisible else {
+          timer.invalidate()
+          return
+        }
+        self.catalog.refreshInBackground()
+      }
+    }
     updateSearch()
   }
   func refresh() { if panel.isVisible { updateSearch() } }
@@ -579,11 +593,11 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
       openSettings()
       return
     }
-    files.cancel()
-    debounce?.cancel()
-    panel.orderOut(nil)
+    dismiss()
   }
   @objc func dismiss() {
+    catalogRefreshTimer?.invalidate()
+    catalogRefreshTimer = nil
     files.cancel()
     debounce?.cancel()
     panel.orderOut(nil)

@@ -30,9 +30,9 @@ The agent can handle installation, but macOS may still require **your approval**
 
 ### Download and install yourself
 
-[**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.7.0/Kestrel-1.7.0-macos-arm64.zip)
+[**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.7.1/Kestrel-1.7.1-macos-arm64.zip)
 
-v1.7.0 preview · [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.7.0) · [SHA-256 checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.7.0/Kestrel-1.7.0-macos-arm64.zip.sha256)
+v1.7.1 preview · [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.7.1) · [SHA-256 checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.7.1/Kestrel-1.7.1-macos-arm64.zip.sha256)
 
 1. Unzip the download and drag **Kestrel.app** into **Applications**.
 2. Open Kestrel. If macOS blocks it, follow the steps below.
