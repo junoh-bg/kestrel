@@ -36,12 +36,65 @@ import KestrelCore
 
 @MainActor final class FileSearch {
   var additionalScopes: [URL] = []
+  private let metadata = MetadataSearch()
+
+  func cancel() { metadata.cancel() }
+
+  func search(_ text: String, completion: @escaping ([LaunchCandidate]) -> Void) {
+    cancel()
+    guard text.count >= 2 else {
+      completion([])
+      return
+    }
+    let scopes: [Any] = [NSMetadataQueryUserHomeScope] + additionalScopes.map { $0 as Any }
+    guard let path = PathSearchQuery(text) else {
+      metadata.search(text, scopes: scopes, completion: completion)
+      return
+    }
+    if let parent = path.explicitParent {
+      searchLeaf(path, text: text, scopes: [parent], completion: completion)
+    } else if let parentName = path.parentName {
+      // Resolve exact parent directories before searching their children. Never truncate
+      // a global list of common leaf names and only then apply the parent path.
+      metadata.search(
+        parentName, scopes: scopes, comparisons: ["==[cd]"], foldersOnly: true,
+        accepts: path.matchesParent
+      ) { [weak self] parents in
+        guard let self else { return }
+        var urls = parents.map(\.url)
+        // A selected scope itself may not be included in Spotlight's descendant results.
+        urls += self.additionalScopes.filter { path.matchesParent($0) }
+        guard !urls.isEmpty else {
+          completion([])
+          return
+        }
+        self.searchLeaf(path, text: text, scopes: urls, completion: completion)
+      }
+    } else {
+      searchLeaf(path, text: text, scopes: scopes, completion: completion)
+    }
+  }
+
+  private func searchLeaf(
+    _ path: PathSearchQuery, text: String, scopes: [Any],
+    completion: @escaping ([LaunchCandidate]) -> Void
+  ) {
+    metadata.search(
+      path.leaf, scopes: scopes, comparisons: ["==[cd]", "BEGINSWITH[cd]"],
+      foldersOnly: path.foldersOnly, rankingQuery: text,
+      accepts: { path.matchesParent($0.deletingLastPathComponent()) }, completion: completion)
+
+  }
+}
+
+@MainActor private final class MetadataSearch {
   private var queries = [NSMetadataQuery]()
   private var observers = [NSObjectProtocol]()
   private var completed = Set<ObjectIdentifier>()
   private var gathered = [String: LaunchCandidate]()
   private var timeout: DispatchWorkItem?
   private var generation = 0
+  private var accepts: (URL) -> Bool = { _ in true }
 
   func cancel() {
     generation += 1
@@ -55,20 +108,31 @@ import KestrelCore
     gathered = [:]
   }
 
-  func search(_ text: String, completion: @escaping ([LaunchCandidate]) -> Void) {
+  func search(
+    _ text: String, scopes: [Any],
+    comparisons: [String] = ["==[cd]", "BEGINSWITH[cd]", "CONTAINS[cd]"],
+    foldersOnly: Bool = false, rankingQuery: String? = nil,
+    accepts: @escaping (URL) -> Bool = { _ in true },
+    completion: @escaping ([LaunchCandidate]) -> Void
+  ) {
     cancel()
-    guard text.count >= 2 else {
+    guard !text.isEmpty else {
       completion([])
       return
     }
+    self.accepts = accepts
     let token = generation
     // Bound each tier separately so an exact/prefix match cannot be displaced
     // by alphabetically earlier substring matches before ranking.
-    queries = ["==[cd]", "BEGINSWITH[cd]", "CONTAINS[cd]"].map { comparison in
+    queries = comparisons.map { comparison in
       let query = NSMetadataQuery()
-      query.searchScopes = [NSMetadataQueryUserHomeScope] + additionalScopes.map { $0 as Any }
-      query.predicate = NSPredicate(
-        format: "%K " + comparison + " %@", NSMetadataItemFSNameKey, text)
+      query.searchScopes = scopes
+      let name = NSPredicate(format: "%K " + comparison + " %@", NSMetadataItemFSNameKey, text)
+      query.predicate =
+        foldersOnly
+        ? NSCompoundPredicate(andPredicateWithSubpredicates: [
+          name, NSPredicate(format: "%K == %@", NSMetadataItemContentTypeKey, "public.folder"),
+        ]) : name
       query.sortDescriptors = [
         NSSortDescriptor(key: NSMetadataItemFSNameKey, ascending: true),
         NSSortDescriptor(key: NSMetadataItemPathKey, ascending: true),
@@ -86,7 +150,7 @@ import KestrelCore
           else { return }
           self.collect(query)
           if self.completed.count == self.queries.count {
-            self.deliver(token: token, text: text, completion: completion)
+            self.deliver(token: token, text: rankingQuery ?? text, completion: completion)
           }
         }
       }
@@ -94,11 +158,13 @@ import KestrelCore
       if !query.start() { collect(query) }
     }
     if completed.count == queries.count {
-      deliver(token: token, text: text, completion: completion)
+      deliver(token: token, text: rankingQuery ?? text, completion: completion)
       return
     }
     let work = DispatchWorkItem { [weak self] in
-      MainActor.assumeIsolated { self?.deliver(token: token, text: text, completion: completion) }
+      MainActor.assumeIsolated {
+        self?.deliver(token: token, text: rankingQuery ?? text, completion: completion)
+      }
     }
     timeout = work
     DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: work)
@@ -107,20 +173,24 @@ import KestrelCore
   private func collect(_ query: NSMetadataQuery) {
     guard completed.insert(ObjectIdentifier(query)).inserted else { return }
     query.disableUpdates()
-    for index in 0..<min(query.resultCount, 160) {
+    var accepted = 0
+    for index in 0..<query.resultCount {
+      if accepted >= 160 { break }
       guard let item = query.result(at: index) as? NSMetadataItem,
         let path = item.value(forAttribute: NSMetadataItemPathKey) as? String
       else { continue }
       guard !path.contains("/Library/Application Support/LocalPilot/") else { continue }
+      let url = URL(fileURLWithPath: path).standardizedFileURL
+      guard accepts(url) else { continue }
       let types = item.value(forAttribute: NSMetadataItemContentTypeTreeKey) as? [String] ?? []
       let kind: LaunchCandidate.Kind =
         types.contains("com.apple.application-bundle")
         ? .application
         : types.contains("public.folder") ? .folder : .file
-      let url = URL(fileURLWithPath: path).standardizedFileURL
       if kind == .application && ["LocalPilot.app", "Kestrel.app"].contains(url.lastPathComponent) {
         continue
       }
+      accepted += 1
       let displayPath = FolderCatalog.displayPath(url)
       gathered[url.path] = LaunchCandidate(
         id: url.path,

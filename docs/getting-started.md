@@ -36,6 +36,12 @@ If you choose to [build from source](development.md), `scripts/package.sh` creat
 - **Snippets:** create reusable text in **Settings → Snippets**. Search with `snip`, then Return copies a snippet for manual pasting.
 - **Appearance:** choose a palette in **Settings → Appearance**. The choice is saved immediately.
 
+## Nested path search (next release)
+
+The development build also accepts `dev/docs` for a `docs` folder directly inside `dev`, or `kestrel/docs/demo` for a deeper path. Use `dev/do` for a partial final name, `file dev/report` to limit results to files and folders, or append `/` to show only folders. Parent names are complete adjacent names; `dev/docs` does not match `dev/project/docs`.
+
+Home paths such as `~/Desktop/dev/docs` and absolute paths work too. Searches remain local and use Spotlight's index with your existing macOS permissions; they do not scan every file or execute commands. This feature is not in the v1.6.1 ZIP yet.
+
 ## When something is missing
 
 | Symptom | Try this |
