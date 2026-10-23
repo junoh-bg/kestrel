@@ -430,6 +430,10 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
       ? []
       : Array(
         SearchRanking.rank(catalog.candidates, query: term, events: model.state.usage).prefix(10))
+    let dotfileQuery = DotfileSearch.supports(term)
+    if dotfileQuery, model.errorMessage == nil, model.startupWarning == nil {
+      footer.stringValue = "Searching dotfiles…"
+    }
     let folders = FolderCatalog.candidates(additionalScopes: files.additionalScopes)
     rows = browsingRows(apps: apps, folders: folders, indexed: [], term: term, fileOnly: fileOnly)
     if query.isEmpty { rows = [] }
@@ -442,6 +446,13 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
           guard let self, self.searchVersion == version else { return }
           self.rows = self.browsingRows(
             apps: apps, folders: folders, indexed: found, term: term, fileOnly: fileOnly)
+          if self.model.errorMessage == nil, self.model.startupWarning == nil {
+            if let notice = self.files.notice {
+              self.footer.stringValue = notice
+            } else if dotfileQuery {
+              self.footer.stringValue = "\(found.count) matches · ↑↓ select · Esc close"
+            }
+          }
           self.reload()
         }
       }
@@ -469,7 +480,7 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
     let applications = ranked.filter { $0.kind == .application }
     let locations = ranked.filter { $0.kind == .folder } + ranked.filter { $0.kind == .file }
     var result = Array(applications.prefix(10)).map(launcherRow)
-    result += locations.prefix(12).map(launcherRow)
+    result += locations.prefix(DotfileSearch.supports(term) ? 120 : 12).map(launcherRow)
     if !fileOnly, !term.isEmpty, "Kestrel Settings".localizedCaseInsensitiveContains(term) {
       result.append(
         LauncherRow(

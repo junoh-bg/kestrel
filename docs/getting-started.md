@@ -44,7 +44,13 @@ Matching results appear as **applications → folders → files → other action
 
 Kestrel accepts `dev/docs` for a `docs` folder directly inside `dev`, or `kestrel/docs/demo` for a deeper path. Use `dev/do` for a partial final name, `file dev/report` to limit results to files and folders, or append `/` to show only folders. Parent names are complete adjacent names; `dev/docs` does not match `dev/project/docs`.
 
-Home paths such as `~/Desktop/dev/docs` and absolute paths work too. Searches remain local and use Spotlight's index with your existing macOS permissions; they do not scan every file or execute commands.
+Home paths such as `~/Desktop/dev/docs` and absolute paths work too. Searches remain local and use your existing macOS permissions. Ordinary file queries use Spotlight; dotfile queries also search filenames directly. Queries never execute commands.
+
+## Hidden dotfiles
+
+Search `.env`, `.env.local`, or `.gitignore` to include matching hidden names that Spotlight may omit. Kestrel scans filenames in Desktop, Documents, Downloads, and folders selected in Search settings, alongside indexed results. It never opens file contents. An absolute dotfile path lists matches directly in that parent folder.
+
+Dotfile searches display up to 120 scrollable local matches. Scans are bounded and skip dependency, VCS, build, cache, and app-package trees; directory symlinks are not followed. Kestrel reports an incomplete scan or unreadable locations. Use a more specific parent path or choose the containing folder when needed. Ordinary file searches still depend on Spotlight coverage and result limits.
 
 ## When something is missing
 
@@ -52,7 +58,7 @@ Home paths such as `~/Desktop/dev/docs` and absolute paths work too. Searches re
 | --- | --- |
 | Option–Space does nothing | Open Kestrel from Applications or its wing menu; check for another app using the shortcut. |
 | A newly installed app is missing | Choose **Refresh applications** from the wing menu. |
-| A file or folder is missing | Use at least two letters, check access, then check whether Spotlight can find it. Permission does not index excluded files. Try a more specific name in large result sets. |
+| A file or folder is missing | Use at least two letters and check access. Dotfile queries use the filename fallback described above; ordinary queries still need Spotlight indexing. Try a more specific path in large result sets. |
 | “Readable” appears but a file is still missing | This only confirms folder-listing access. Spotlight coverage and result limits are separate. |
 | Clipboard search is empty | Enable history, then copy ordinary text. Earlier clipboard contents are not imported. Some sensitive/transient content is intentionally skipped. |
 | Closing the panel does not quit the app | This is expected. Use **Quit Kestrel** in the wing menu. |
