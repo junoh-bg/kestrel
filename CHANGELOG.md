@@ -2,6 +2,15 @@
 
 User-facing changes are recorded here. Release versions follow `MAJOR.MINOR.PATCH`.
 
+## [1.7.2] — Unreleased · Consistent result priorities
+
+- Orders matching results as applications, folders, files, then Kestrel Settings and Google search.
+- Keeps matching applications above folders and files when delayed Spotlight results arrive.
+- Preserves relevance and learned usage within each type, and applies type priority before display limits.
+- Keeps file-only search limited to folders and files, with the same folder-first order.
+
+[Release notes](docs/releases/1.7.2.md)
+
 ## [1.7.1] — 2026-10-15 · Newly installed apps
 
 - Refreshes the application list in the background when the launcher opens and every five seconds while it remains visible.

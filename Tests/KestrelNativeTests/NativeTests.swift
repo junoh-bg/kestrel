@@ -925,3 +925,26 @@ import Testing
   model.checkForClipboardChanges()
   #expect(model.state.history.isEmpty)
 }
+
+@Test @MainActor func delayedSpotlightFolderKeepsApplicationFirstAndSelected() async throws {
+  let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+  defer { try? FileManager.default.removeItem(at: directory) }
+  let name = "kestrel-folder-search-fixture"
+  try FileManager.default.createDirectory(
+    at: directory.appendingPathComponent(name + ".app"), withIntermediateDirectories: true)
+  let catalog = AppCatalog(roots: [directory.path])
+  catalog.refresh()
+  let launcher = LauncherWindow(
+    model: try AppModel(
+      directory: directory.appendingPathComponent("data"), pasteboard: .withUniqueName()),
+    catalog: catalog)
+  defer { launcher.dismiss() }
+  launcher.input.stringValue = name
+  launcher.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification))
+  #expect(renderedSearchRows(launcher).first?.labels.contains("Application") == true)
+  try await Task.sleep(for: .seconds(2.5))
+  let rows = renderedSearchRows(launcher)
+  #expect(rows.contains { $0.labels.contains(name) && $0.icons.contains("folder") })
+  #expect(rows.first?.labels.contains("Application") == true)
+  #expect(launcher.table.selectedRow == 0)
+}

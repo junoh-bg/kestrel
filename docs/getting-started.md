@@ -38,6 +38,8 @@ If macOS blocks opening Kestrel again after replacing or updating it, the same p
 - **Snippets:** create reusable text in **Settings → Snippets**. Search with `snip`, then Return copies a snippet for manual pasting.
 - **Appearance:** choose a palette in **Settings → Appearance**. The choice is saved immediately.
 
+Matching results appear as **applications → folders → files → other actions**. Within each type, match quality and learned usage decide the order. File-only searches show folders before files.
+
 ## Nested path search
 
 Kestrel accepts `dev/docs` for a `docs` folder directly inside `dev`, or `kestrel/docs/demo` for a deeper path. Use `dev/do` for a partial final name, `file dev/report` to limit results to files and folders, or append `/` to show only folders. Parent names are complete adjacent names; `dev/docs` does not match `dev/project/docs`.

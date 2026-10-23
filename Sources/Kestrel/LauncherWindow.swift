@@ -453,33 +453,29 @@ final class LauncherWindow: NSObject, NSTextFieldDelegate, NSTableViewDataSource
     apps: [LaunchCandidate], folders: [LaunchCandidate], indexed: [LaunchCandidate], term: String,
     fileOnly: Bool
   ) -> [LauncherRow] {
-    let appIDs = Set(apps.map(\.id))
-    var seen = Set<String>()
-    let candidates = (folders + indexed).filter {
-      (!fileOnly || $0.kind != .application) && !appIDs.contains($0.id)
-        && seen.insert($0.id).inserted
-    }
-    let ordered = candidates.sorted {
+    let orderedLocations = (folders + indexed).sorted {
       if $0.url.pathComponents.count != $1.url.pathComponents.count {
         return $0.url.pathComponents.count < $1.url.pathComponents.count
       }
       return $0.url.path < $1.url.path
     }
-    let ranked = SearchRanking.rank(ordered, query: term, events: model.state.usage)
-    let exactFolders = ranked.filter {
-      $0.kind == .folder && $0.title.caseInsensitiveCompare(term) == .orderedSame
+    var seen = Set<String>()
+    let candidates = (apps + orderedLocations).filter {
+      (!fileOnly || $0.kind != .application) && seen.insert($0.id).inserted
     }
-    let promotedFolders = Array(exactFolders.prefix(3))
-    let exactIDs = Set(promotedFolders.map(\.id))
-    var result = promotedFolders.map(launcherRow)
-    result += apps.map(launcherRow)
+    let ranked = SearchRanking.rank(candidates, query: term, events: model.state.usage)
+    // Type priority is stronger than relevance and applies before the visible limits.
+    // Keep relevance and learned ordering within each type, regardless of arrival time.
+    let applications = ranked.filter { $0.kind == .application }
+    let locations = ranked.filter { $0.kind == .folder } + ranked.filter { $0.kind == .file }
+    var result = Array(applications.prefix(10)).map(launcherRow)
+    result += locations.prefix(12).map(launcherRow)
     if !fileOnly, !term.isEmpty, "Kestrel Settings".localizedCaseInsensitiveContains(term) {
       result.append(
         LauncherRow(
           title: "Kestrel Settings", subtitle: "Clipboard history and snippets",
           symbol: "gearshape", action: .settings))
     }
-    result += ranked.filter { !exactIDs.contains($0.id) }.prefix(12).map(launcherRow)
     if !fileOnly, !term.isEmpty, let url = GoogleSearch.url(for: term) {
       result.append(
         LauncherRow(
