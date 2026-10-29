@@ -9,6 +9,41 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
         <description>Signed Kestrel preview updates for Apple silicon.</description>
         <language>en</language>
         <item>
+            <title>1.7.2</title>
+            <pubDate>Thu, 29 Oct 2026 15:27:13 +0900</pubDate>
+            <link>https://github.com/junoh-bg/kestrel</link>
+            <sparkle:version>16</sparkle:version>
+            <sparkle:shortVersionString>1.7.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description><![CDATA[<pre># Kestrel 1.7.2 — More reliable file search
+
+Matching results now appear in this order:
+
+1. Applications
+2. Folders
+3. Files
+4. Kestrel Settings and Google search
+
+A matching application stays above folders and files when Spotlight results arrive. Within each type, match quality and learned usage still decide the order. File-only searches show folders before files. Deliberate keyboard selections remain selected when additional results arrive.
+
+## Find hidden dotfiles
+
+Queries such as `.env`, `.env.local`, and `.gitignore` now supplement Spotlight with a background filename scan. This finds dotfiles that Spotlight may omit. The scan covers Desktop, Documents, Downloads, and folders selected in Search settings; an absolute dotfile path searches its parent directly. No file contents are opened or indexed.
+
+Dotfile queries show up to 120 scrollable local matches instead of twelve. Large or unreadable folder trees can produce partial results; Kestrel shows a notice. Dependency, VCS, build, cache, and app-package contents are skipped, and directory symlinks are not followed. Ordinary file queries still rely on Spotlight.
+
+## Update
+
+Choose **Check for Updates…** in the wing menu or General settings. Installation asks first. Settings, snippets, and clipboard history remain in place, and official builds retain the persistent signing identity.
+
+Users upgrading directly from 1.6.1 or earlier may need the [one-time Full Disk Access refresh](https://github.com/junoh-bg/kestrel/blob/main/docs/getting-started.md#one-time-permission-refresh-for-170). Self-signing does not provide Apple notarization: macOS may still require **Open Anyway** under Privacy &amp; Security. See the [setup guide](https://github.com/junoh-bg/kestrel/blob/main/docs/getting-started.md#first-launch).
+
+Apple silicon · macOS 14+ · build 16 · preview.
+</pre>]]></description>
+            <enclosure url="https://github.com/junoh-bg/kestrel/releases/download/v1.7.2/Kestrel-1.7.2-macos-arm64.zip" length="1427724" type="application/octet-stream" sparkle:edSignature="QNFdBYA9ZHDl/O89eMXawMNAO7tz5HDW5CDYDdMy6UI329wyxmOk8RW5Kb5KQf9xDkKxf5caPjzG5s2koSyKCw=="/>
+        </item>
+        <item>
             <title>1.7.1</title>
             <pubDate>Thu, 15 Oct 2026 17:15:46 +0900</pubDate>
             <link>https://github.com/junoh-bg/kestrel</link>
@@ -74,33 +109,9 @@ Apple silicon · macOS 14+ · build 13 · preview. Self-signed and **not Apple-n
 </pre>]]></description>
             <enclosure url="https://github.com/junoh-bg/kestrel/releases/download/v1.7.0/Kestrel-1.7.0-macos-arm64.zip" length="1410073" type="application/octet-stream" sparkle:edSignature="0SJo2zGm/1SRP7Dy62WBIFvABoJobDDWgvBeMeX2eL4ka71+uHVoQV2XxSEqQZZhj6xcMq+vaabnjmjAw/E1Aw=="/>
         </item>
-        <item>
-            <title>1.6.1</title>
-            <pubDate>Thu, 15 Oct 2026 11:23:35 +0900</pubDate>
-            <link>https://github.com/junoh-bg/kestrel</link>
-            <sparkle:version>12</sparkle:version>
-            <sparkle:shortVersionString>1.6.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description><![CDATA[<pre># Kestrel 1.6.1 — Settings readability fix
-
-Fixed hard-to-read checkbox labels in **Settings → General** and **Settings → Clipboard**, including “Check automatically.” Labels now use the selected theme&#x27;s text color consistently.
-
-All five Settings sections were reviewed across all five themes. Added pixel-level checks for checked, unchecked, and disabled checkbox labels under both legacy and current macOS rendering paths.
-
-## Update
-
-From Kestrel 1.6.0, choose **Check for Updates…** in the wing menu or General settings, then approve installation. Version 1.5.0 and earlier need one manual app replacement. Saved settings and snippets remain in place.
-
-## Compatibility
-
-Apple silicon, macOS 14+, build 12. This preview remains ad-hoc signed and **not Apple-notarized**. Follow the [first-launch guide](https://github.com/junoh-bg/kestrel/blob/main/docs/getting-started.md#first-launch) if macOS blocks a trusted download. Separate-Mac and macOS 14 acceptance remain unverified.
-</pre>]]></description>
-            <enclosure url="https://github.com/junoh-bg/kestrel/releases/download/v1.6.1/Kestrel-1.6.1-macos-arm64.zip" length="1392712" type="application/octet-stream" sparkle:edSignature="Cd9KEtEqhC5l4195wbN34zWdkrANH26t775aici4h6flCwON7063+vV/+2YmPTUzl7X8QCukBW7nnx8zho1uDw=="/>
-        </item>
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: yhDy6WIBWhtQhG0dqtn13bIwLmWHxSra9upPXrssE1GAUvSpA3gJLCkoK1J6/9y4RW5KVyOO5y7KmR5C2K+uCg==
-length: 8349
+edSignature: ceToqKCVCqvQPVzyuob0s4lqRgh76j7mdgnEKt0qMgOBgVyi2mZHR8OYN4zeLpIQPoFZUT2H5li7JB+2npqFAw==
+length: 9193
 -->
