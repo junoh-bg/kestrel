@@ -30,9 +30,9 @@ The agent can handle installation, but macOS may still require **your approval**
 
 ### Download and install yourself
 
-[**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.7.1/Kestrel-1.7.1-macos-arm64.zip)
+[**Download Kestrel for Mac (.zip)**](https://github.com/junoh-bg/kestrel/releases/download/v1.7.2/Kestrel-1.7.2-macos-arm64.zip)
 
-v1.7.1 preview · [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.7.1) · [SHA-256 checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.7.1/Kestrel-1.7.1-macos-arm64.zip.sha256)
+v1.7.2 preview · [Release notes](https://github.com/junoh-bg/kestrel/releases/tag/v1.7.2) · [SHA-256 checksum](https://github.com/junoh-bg/kestrel/releases/download/v1.7.2/Kestrel-1.7.2-macos-arm64.zip.sha256)
 
 1. Unzip the download and drag **Kestrel.app** into **Applications**.
 2. Open Kestrel. If macOS blocks it, follow the steps below.
@@ -62,7 +62,7 @@ The script creates `dist/Kestrel.app`; it does not install it. Quit Kestrel, mov
 
 ### Updating
 
-**Upgrading to 1.7.0:** if you enabled Full Disk Access before, macOS may need one final approval for Kestrel’s new signing identity. [One-time permission steps](docs/getting-started.md#one-time-permission-refresh-for-170).
+**Upgrading from 1.6.1 or earlier:** if you enabled Full Disk Access before, macOS may need one final approval for Kestrel’s persistent signing identity. [One-time permission steps](docs/getting-started.md#one-time-permission-refresh-for-170).
 
 If your wing menu has **Check for Updates…**, use it to download and install a newer version. Automatic checks can be turned off in **Settings → General**; installation always asks first.
 
@@ -76,8 +76,10 @@ Version 1.5.0 and earlier need one manual upgrade to receive this feature: quit 
 
 ## Use
 
-Type an app or folder name, `dev/docs`, `file report`, a Google query, `= 12 * 8`, `clip meeting`, or `snip signature`. Use **↑ / ↓** to select, **Return** to open or copy, and **Esc / ⌘ W** to dismiss. **⌘ K** opens actions for the selected result, such as Show in Finder or Copy Path.
+Type an app or folder name, `dev/docs`, `file report`, `.env`, a Google query, `= 12 * 8`, `clip meeting`, or `snip signature`. Use **↑ / ↓** to select, **Return** to open or copy, and **Esc / ⌘ W** to dismiss. **⌘ K** opens actions for the selected result, such as Show in Finder or Copy Path.
 
-Open **Settings** from the wing menu to choose a theme, manage snippets, or enable optional clipboard history. File search uses Spotlight and may need folder access. Clipboard history starts off and stores unencrypted text locally when enabled. Selecting Google search sends that query to your browser; Kestrel has no telemetry or cloud sync. Update checks contact GitHub for release information.
+Matching apps appear before folders, then files. Ordinary file search uses Spotlight; dotfile searches also scan filenames in Desktop, Documents, Downloads, and your selected folders. Folder access may be needed, and large searches can return partial results.
+
+Open **Settings** from the wing menu to choose a theme, manage snippets, or enable optional clipboard history. History starts off and stores unencrypted text locally when enabled. Kestrel has no telemetry or cloud sync. Google searches open in your browser; update checks contact GitHub.
 
 [Setup & help](docs/getting-started.md) · [Release notes](CHANGELOG.md) · [Report an issue](https://github.com/junoh-bg/kestrel/issues) · [MIT license](LICENSE)

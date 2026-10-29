@@ -2,7 +2,7 @@
 
 User-facing changes are recorded here. Release versions follow `MAJOR.MINOR.PATCH`.
 
-## [1.7.2] — Unreleased · More reliable file search
+## [1.7.2] — 2026-10-29 · More reliable file search
 
 - Adds a filename-only fallback for dotfiles such as `.env` and `.gitignore`, including dotfiles omitted by Spotlight. No file contents are read.
 - Searches common and selected folders with cancellation and scan bounds; reports partial scans and shows up to 120 scrollable dotfile matches.

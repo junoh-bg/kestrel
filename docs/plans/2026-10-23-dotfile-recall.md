@@ -18,7 +18,7 @@ Changing Spotlight predicates alone cannot retrieve unindexed names. A persisten
 
 ## Verification scope
 
-Regression tests cover unindexed and unreadable-content dotfiles, variants, hidden parents, relative and absolute paths, overlapping scopes, dependency exclusions, explicitly selected roots, directory-loop avoidance, retained file symlink names, cancellation/replacement, scan bounds, and more than twelve scrollable matches. All files in fixtures contain empty synthetic data. Filename audits print counts/timing only. Release remains paused until user authorization to resume.
+Regression tests cover unindexed and unreadable-content dotfiles, variants, hidden parents, relative and absolute paths, overlapping scopes, dependency exclusions, explicitly selected roots, directory-loop avoidance, retained file symlink names, cancellation/replacement, scan bounds, and more than twelve scrollable matches. All files in fixtures contain empty synthetic data. Filename audits print counts/timing only. Release was paused for review; the user authorized the 1.7.2 merge and release on 2026-10-29.
 
 ## Review and verification
 
@@ -26,4 +26,8 @@ Reviewed traversal scope, cancellation/generation handling, result-source mergin
 
 The full suite passed 101 Swift tests (17 XCTest plus 84 Swift Testing), and all 12 packaging/signing tests passed. Strict Swift format lint, whitespace checks, release build, package validation, nested signature verification, and isolated packaged smoke test passed. The filename-only audit matched the independent exact-name count for the development projects, completed in approximately 2.5 seconds, and reported neither truncation nor inaccessible folders. Private filenames and credential contents are not part of this report.
 
-Prepared signed 1.7.2/build 16 locally. The Mac locked before installing this combined build and checking its actual launcher, so that acceptance step remains pending. The prior build-15 ordering fix was already verified in the installed launcher. The public release/feed remain unchanged, and PR #17 remains unmerged while the user evaluates the additional fix.
+At the initial review on 2026-10-23, signed 1.7.2/build 16 was prepared locally, but the Mac locked before its installed-app acceptance check. The prior build-15 ordering fix had passed live verification. Publication remained paused until the acceptance recorded below.
+
+## Release acceptance — 2026-10-29
+
+Installed signed build 16 with the prior app preserved under ignored dist/archive. The live launcher found all nine independently audited project .env files without opening them. The broad query showed a partial-scan notice, matching the documented time bound. Cursor remained selected above delayed folder/file results, and dev/docs returned the intended folder. The current 101-test Swift suite and all 12 packaging/signing tests passed; the release build and strict signature verification passed. The README and setup guide now target 1.7.2 and explain dotfile coverage. Separate-Mac installation and older supported macOS acceptance remain unverified.

@@ -12,7 +12,9 @@ Kestrel is distributed as MIT-licensed source and a prebuilt macOS app ZIP on Gi
 
 ## Compatibility record
 
-The 1.7.0 preview targets Apple silicon and macOS 14+. Local automated tests, packaging, and startup checks have run on macOS 27.0.1. An isolated signed upgrade and rejection of a tampered download were verified. A real persistent-signature Sparkle update also retained Full Disk Access on this Mac. A separate-Mac downloaded installation and macOS 14 acceptance have not been verified. Do not describe these as completed or claim a warning-free installation.
+The 1.7.2 preview targets Apple silicon and macOS 14+. Local automated tests, packaging, and startup checks have run on macOS 27.0.1. An isolated signed upgrade and rejection of a tampered download were verified. A real persistent-signature Sparkle update also retained Full Disk Access on this Mac. A separate-Mac downloaded installation and macOS 14 acceptance have not been verified. Do not describe these as completed or claim a warning-free installation.
+
+On 2026-10-29, installed 1.7.2/build 16 on the maintainer’s Apple silicon Mac running macOS 27.0.1. Live launcher checks found all nine independently audited project `.env` files, showed the partial-scan notice for a broad query, kept Cursor selected above arriving folders/files, and found `dev/docs`. No environment-file contents were opened. The full 101-test Swift suite, all 12 packaging/signing tests, strict format lint, release build, and signature verification passed.
 
 ## Manual acceptance
 
