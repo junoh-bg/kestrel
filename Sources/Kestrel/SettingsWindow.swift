@@ -314,7 +314,7 @@ final class SettingsWindow: NSObject, NSTableViewDataSource, NSTableViewDelegate
           ]),
         searchAccessStatus,
         label(
-          "Kestrel searches filenames locally using Spotlight. Permission does not make excluded or unindexed files searchable.",
+          "File search uses Spotlight; dotfile queries also scan filenames in common and selected folders. Permissions still apply.",
           muted: true),
       ])
     capture.updateTheme()

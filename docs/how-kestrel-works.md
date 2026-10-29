@@ -9,6 +9,8 @@ flowchart TD
     Input["Option–Space → type a query"] --> Router["Kestrel chooses the matching tool"]
     Router --> Search["Apps, files and folders"]
     Search --> Local["App catalog + common folders + macOS Spotlight index"]
+    Search --> Dotfiles["Dotfile queries: filename scan in common and selected folders"]
+    Dotfiles --> Results
     Local --> Results["Rank matching results on this Mac"]
     Results --> Open["Open app / folder / file"]
     Router --> Calc["Calculate locally"]
@@ -17,9 +19,10 @@ flowchart TD
     Router --> Web["Google option"]
     Web -->|"Only when selected"| Browser["Default browser → Google"]
     Access["macOS folder permissions / optional Full Disk Access"] --> Local
+    Access --> Dotfiles
 ```
 
-Nested-path searches first find matching parent folders, then their children. `dev/docs` means a `docs` folder directly inside `dev`; indexing and permissions still apply. Ranking uses match quality and local usage history. Search text is not executed as a command.
+Nested-path searches first find matching parent folders, then their children. `dev/docs` means a `docs` folder directly inside `dev`; indexing and permissions still apply. Results put applications before folders, then files and other actions. Ranking within each type uses match quality and local usage history. Dotfile queries also scan filenames in common and selected folders, without opening contents. Scans are bounded, exclude dependency/build trees, and report partial results. Ordinary file searches still depend on Spotlight. Search text is not executed as a command.
 
 Clipboard capture is optional and starts off. Settings, snippets, learned ranking, and enabled history stay in local storage; there is no Kestrel account, telemetry, or cloud sync. Selecting Google search sends that query to the browser and Google. Update checks contact GitHub but do not send search queries, snippets, or clipboard history.
 

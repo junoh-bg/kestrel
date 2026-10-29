@@ -72,8 +72,29 @@ import KestrelCore
 @MainActor final class FileSearch {
   var additionalScopes: [URL] = []
   private let metadata = MetadataSearch()
+  private let filenameRoots: [URL]
+  private var dotfileTask: Task<DotfileSearch.Report, Never>?
+  private var generation = 0
+  private(set) var notice: String?
 
-  func cancel() { metadata.cancel() }
+  init(filenameRoots: [URL]? = nil) {
+    let manager = FileManager.default
+    self.filenameRoots =
+      filenameRoots
+      ?? [.desktopDirectory, .documentDirectory, .downloadsDirectory].flatMap {
+        manager.urls(for: $0, in: .userDomainMask)
+      }
+  }
+
+  deinit { dotfileTask?.cancel() }
+
+  func cancel() {
+    generation += 1
+    dotfileTask?.cancel()
+    dotfileTask = nil
+    metadata.cancel()
+    notice = nil
+  }
 
   func search(_ text: String, completion: @escaping ([LaunchCandidate]) -> Void) {
     cancel()
@@ -81,6 +102,48 @@ import KestrelCore
       completion([])
       return
     }
+    guard DotfileSearch.supports(text) else {
+      searchMetadata(text, completion: completion)
+      return
+    }
+    let token = generation
+    let parent = PathSearchQuery(text)?.explicitParent
+    let roots = parent.map { [$0] } ?? (additionalScopes + filenameRoots)
+    let task = Task.detached(priority: .utility) {
+      DotfileSearch.scan(text, roots: roots, recursive: parent == nil)
+    }
+    dotfileTask = task
+    searchMetadata(text) { [weak self] indexed in
+      Task { @MainActor [weak self] in
+        let direct = await task.value
+        guard let self, self.generation == token, !task.isCancelled else { return }
+        self.dotfileTask = nil
+        self.notice =
+          direct.limited
+          ? "Search incomplete · narrow the folder path"
+          : direct.unreadableFolders > 0 ? "Some locations could not be searched" : nil
+        var seen = Set<String>()
+        let candidates = (direct.candidates + indexed).compactMap { item -> LaunchCandidate? in
+          let url = DotfileSearch.canonicalURL(item.url)
+          guard !DotfileSearch.excluded(url, roots: roots), seen.insert(url.path).inserted else {
+            return nil
+          }
+          let displayPath = FolderCatalog.displayPath(url)
+          return LaunchCandidate(
+            id: url.path, title: item.title,
+            subtitle: item.kind == .folder ? "Folder · " + displayPath : displayPath,
+            kind: item.kind, url: url)
+        }
+        let ranked = SearchRanking.rank(candidates, query: text, events: [])
+        if ranked.count > 120, self.notice == nil {
+          self.notice = "More matches available · narrow the folder path"
+        }
+        completion(Array(ranked.prefix(120)))
+      }
+    }
+  }
+
+  private func searchMetadata(_ text: String, completion: @escaping ([LaunchCandidate]) -> Void) {
     let scopes: [Any] = [NSMetadataQueryUserHomeScope] + additionalScopes.map { $0 as Any }
     guard let path = PathSearchQuery(text) else {
       metadata.search(text, scopes: scopes, completion: completion)
